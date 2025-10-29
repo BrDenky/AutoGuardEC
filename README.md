@@ -139,3 +139,10 @@ Computer Science Student – Yachay Tech University
 
 ## 📜 License
 This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
+
+---
+
+  
+**Made with ❤️ by the AutoGuardEC Team**
+
+🚗 *Your peace of mind every mile.*
