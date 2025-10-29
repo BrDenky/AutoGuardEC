@@ -120,7 +120,7 @@ Or API tests with Postman collection (available in `/tests/postman_collection.js
 **Mateo Pilaquinga**  
 Computer Science Student – Yachay Tech University  
 📧 mateo.pilaquinga@yachaytech.edu.ec  
-🌐 [LinkedIn](www.linkedin.com/in/pilaquinga-mateo)
+🌐 [LinkedIn](https://linkedin.com/in/pilaquinga-mateo)
 
 **Harolt Farinango**  
 Computer Science Student – Yachay Tech University  
