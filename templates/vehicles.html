@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="text-center mb-4">Vehicles</h2>
+
+<form id="vehicleForm" class="row g-3 mb-4">
+  <div class="col-md-3">
+    <input type="number" class="form-control" id="customer_id" placeholder="Customer ID" required>
+  </div>
+  <div class="col-md-3">
+    <input type="text" class="form-control" id="brand" placeholder="Brand" required>
+  </div>
+  <div class="col-md-3">
+    <input type="text" class="form-control" id="model" placeholder="Model" required>
+  </div>
+  <div class="col-md-2">
+    <input type="number" class="form-control" id="year" placeholder="Year">
+  </div>
+  <div class="col-md-3">
+    <input type="text" class="form-control" id="license_plate" placeholder="License Plate" required>
+  </div>
+  <div class="col-md-2">
+    <button type="submit" class="btn btn-success w-100">Add Vehicle</button>
+  </div>
+</form>
+
+<table class="table table-striped text-center">
+  <thead class="table-dark">
+    <tr>
+      <th>ID</th><th>Customer</th><th>Brand</th><th>Model</th><th>Year</th><th>License</th>
+    </tr>
+  </thead>
+  <tbody id="vehiclesTable"></tbody>
+</table>
+
+<script src="{{ url_for('static', filename='js/vehicles.js') }}"></script>
+{% endblock %}
