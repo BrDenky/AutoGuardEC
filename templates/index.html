@@ -1,8 +1,127 @@
 {% extends 'base.html' %}
+
+{% block title %}AutoGuardEC - Dashboard{% endblock %}
+
 {% block content %}
-<div class="text-center mt-5">
-  <h1 class="display-5 mb-3">Car Insurance Management System</h1>
-  <p class="lead">Manage customers, vehicles, and policies in one place.</p>
-  <a href="/customers" class="btn btn-primary btn-lg mt-3">Start Managing</a>
+<h1 class="page-title">Dashboard Overview</h1>
+
+<!-- Stats Cards -->
+<div class="stats-container">
+    <div class="stat-card blue">
+        <div class="stat-header">
+            <div>
+                <div class="stat-value">{{ total_customers }}</div>
+                <div class="stat-label">Total Customers</div>
+            </div>
+            <div class="stat-icon blue">
+                <i class="fas fa-users"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="stat-card green">
+        <div class="stat-header">
+            <div>
+                <div class="stat-value">{{ active_policies }}</div>
+                <div class="stat-label">Active Policies</div>
+            </div>
+            <div class="stat-icon green">
+                <i class="fas fa-file-contract"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="stat-card orange">
+        <div class="stat-header">
+            <div>
+                <div class="stat-value">{{ total_vehicles }}</div>
+                <div class="stat-label">Registered Vehicles</div>
+            </div>
+            <div class="stat-icon orange">
+                <i class="fas fa-car"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="stat-card purple">
+        <div class="stat-header">
+            <div>
+                <div class="stat-value">$125K</div>
+                <div class="stat-label">Monthly Revenue</div>
+            </div>
+            <div class="stat-icon purple">
+                <i class="fas fa-dollar-sign"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Chart Card -->
+<div class="chart-card">
+  <div class="chart-header">
+    <h3 class="chart-title">AutoGuardEC Analytics</h3>
+    <div class="chart-tabs">
+      <button class="chart-tab active" data-target="policy-section">Policy Analytics</button>
+      <button class="chart-tab" data-target="customers-section">Customers Analytics</button>
+      <button class="chart-tab" data-target="employment-section">Employment Analytics</button>
+    </div>
+  </div>
+
+  <div class="chart-container">
+    <!-- Policy Analytics -->
+    <div id="policy-section" class="chart-section">
+      <div class="chart-wrapper">
+        <canvas id="policyChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Customers Analytics -->
+    <div id="customers-section" class="chart-section">
+      <div class="chart-wrapper">
+        <canvas id="customerVehicleChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Employment Analytics -->
+    <div id="employment-section" class="chart-section">
+      <div class="chart-wrapper">
+        <canvas id="employmentChart"></canvas>
+      </div>
+   </div>
+  </div>
+
+<!-- Scripts externos -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/dashboard_charts.js') }}"></script>
+
+
+
+
+
+
+
+
+<!-- Quick Actions -->
+<h3 style="margin-bottom: 15px; color: #2c3e50;">Quick Actions</h3>
+<div class="quick-actions">
+    <a href="/customers" class="action-btn">
+        <i class="fas fa-user-plus"></i>
+        <div>Add Customer</div>
+    </a>
+    <a href="/vehicles" class="action-btn">
+        <i class="fas fa-car-side"></i>
+        <div>Register Vehicle</div>
+    </a>
+    <a href="/policies" class="action-btn">
+        <i class="fas fa-file-signature"></i>
+        <div>New Policy</div>
+    </a>
+    <a href="#" class="action-btn">
+        <i class="fas fa-chart-bar"></i>
+        <div>View Reports</div>
+    </a>
 </div>
 {% endblock %}

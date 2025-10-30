@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="page-title">Dashboard Overview</h1>
+
+<div class="stats-container">
+  <div class="stat-card blue">
+    <div class="stat-header">
+      <div>
+        <div class="stat-value">1,247</div>
+        <div class="stat-label">Total Customers</div>
+      </div>
+      <div class="stat-icon blue">
+        <i class="fas fa-users"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="stat-card green">
+    <div class="stat-header">
+      <div>
+        <div class="stat-value">892</div>
+        <div class="stat-label">Active Policies</div>
+      </div>
+      <div class="stat-icon green">
+        <i class="fas fa-file-contract"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="stat-card orange">
+    <div class="stat-header">
+      <div>
+        <div class="stat-value">2,156</div>
+        <div class="stat-label">Registered Vehicles</div>
+      </div>
+      <div class="stat-icon orange">
+        <i class="fas fa-car"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="stat-card purple">
+    <div class="stat-header">
+      <div>
+        <div class="stat-value">$125K</div>
+        <div class="stat-label">Monthly Revenue</div>
+      </div>
+      <div class="stat-icon purple">
+        <i class="fas fa-dollar-sign"></i>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
