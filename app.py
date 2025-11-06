@@ -1,15 +1,39 @@
+# dot.env
+from dotenv import load_dotenv
+load_dotenv()
 # Import necessary libraries
 from flask import Flask, jsonify, make_response, request, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow.sqla import SQLAlchemyAutoSchema
 from marshmallow import fields
 
+import os
+from dotenv import load_dotenv
+#import openai
+#load_dotenv()
+#openai.api_key = os.getenv("OPENAI_API_KEY")
+
+
+
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
 # Connection with docker proyect
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:123@localhost:3307/CarInsuranceDB?charset=utf8mb4'
-
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("SQLALCHEMY_DATABASE_URI")
+#'mysql+pymysql://root:123@localhost:3307/CarInsuranceDB?charset=utf8mb4'
 db = SQLAlchemy(app)
+
+
+
+# Prueba AGENTE INTELIGENTE
+#from ai_agent import ai_bp
+#app.register_blueprint(ai_bp)
+
+
+
+
+
+
+
 
 
 # Models
@@ -71,6 +95,27 @@ class Policy(db.Model):
         self.status = status
 
 
+class Agent(db.Model):
+    __tablename__ = 'Agent'
+    __table_args__ = {
+        'mysql_charset': 'utf8mb4',
+        'mysql_collate': 'utf8mb4_unicode_ci'
+    }
+
+    agent_id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    phone = db.Column(db.String(20))
+    email = db.Column(db.String(50), unique=True)
+
+    def __init__(self, name, phone=None, email=None):
+        self.name = name
+        self.phone = phone
+        self.email = email
+
+
+
+
+
 # Marshmallow Schemas
 
 class CustomerSchema(SQLAlchemyAutoSchema):
@@ -88,6 +133,11 @@ class VehicleSchema(SQLAlchemyAutoSchema):
 class PolicySchema(SQLAlchemyAutoSchema):
     class Meta:
         model = Policy
+        load_instance = True
+
+class AgentSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = Agent
         load_instance = True
 
 
@@ -174,10 +224,28 @@ def delete_customer(customer_id):
 # Endpoint GET vehicles con Schema
 @app.route('/api/vehicles', methods=['GET'])
 def get_vehicles():
-    get_vehicles = Vehicle.query.all()
+    # Get query parameters (default: page=1, limit=6)
+    page = request.args.get('page', default=1, type=int)
+    limit = request.args.get('limit', default=6, type=int)
+
+    # Paginate query (error_out=False evita excepciones si la página es inválida)
+    vehicles_paginated = Vehicle.query.paginate(page=page, per_page=limit, error_out=False)
+
+    # Serialize current page items
     vehicle_schema = VehicleSchema(many=True)
-    result = vehicle_schema.dump(get_vehicles)
-    return make_response(jsonify({'vehicles': result}), 200)
+    result = vehicle_schema.dump(vehicles_paginated.items)
+
+    # Build response with pagination metadata
+    response = {
+        'vehicles': result,
+        'total_vehicles': vehicles_paginated.total,
+        'total_pages': vehicles_paginated.pages,
+        'current_page': vehicles_paginated.page,
+        'has_next': vehicles_paginated.has_next,
+        'has_prev': vehicles_paginated.has_prev
+    }
+
+    return make_response(jsonify(response), 200)
 
 # Endpoint GET vehicle por ID con Schema
 @app.route('/api/vehicles/<int:vehicle_id>', methods=['GET'])
@@ -228,10 +296,28 @@ def delete_vehicle(vehicle_id):
 # Endpoint GET policies con Schema
 @app.route('/api/policies', methods=['GET'])
 def get_policies():
-    get_policies = Policy.query.all()
+    # Get query parameters (default: page=1, limit=6)
+    page = request.args.get('page', default=1, type=int)
+    limit = request.args.get('limit', default=6, type=int)
+
+    # Paginate query (error_out=False evita excepciones si la página es inválida)
+    policies_paginated = Policy.query.paginate(page=page, per_page=limit, error_out=False)
+
+    # Serialize current page items
     policy_schema = PolicySchema(many=True)
-    result = policy_schema.dump(get_policies)
-    return make_response(jsonify({'policies': result}), 200)
+    result = policy_schema.dump(policies_paginated.items)
+
+    # Build response with pagination metadata
+    response = {
+        'policies': result,
+        'total_policies': policies_paginated.total,
+        'total_pages': policies_paginated.pages,
+        'current_page': policies_paginated.page,
+        'has_next': policies_paginated.has_next,
+        'has_prev': policies_paginated.has_prev
+    }
+
+    return make_response(jsonify(response), 200)
 
 # Endpoint GET policy por ID con Schema
 @app.route('/api/policies/<int:policy_id>', methods=['GET'])
@@ -278,6 +364,91 @@ def delete_policy(policy_id):
 
 
 
+# Agent Endpoints--------------------------------------------------------------------------------------------------
+
+# GET - Paginated Agents
+@app.route('/api/agents', methods=['GET'])
+def get_agents():
+    # Query parameters (default: page=1, limit=6)
+    page = request.args.get('page', default=1, type=int)
+    limit = request.args.get('limit', default=6, type=int)
+
+    # Paginate query
+    agents_paginated = Agent.query.paginate(page=page, per_page=limit, error_out=False)
+
+    # Serialize current page items
+    agents_schema = AgentSchema(many=True)
+    result = agents_schema.dump(agents_paginated.items)
+
+    # Build response with pagination metadata
+    response = {
+        'agents': result,
+        'total_agents': agents_paginated.total,
+        'total_pages': agents_paginated.pages,
+        'current_page': agents_paginated.page,
+        'has_next': agents_paginated.has_next,
+        'has_prev': agents_paginated.has_prev
+    }
+
+    return make_response(jsonify(response), 200)
+
+
+# GET - Single Agent by ID
+@app.route('/api/agents/<int:agent_id>', methods=['GET'])
+def get_agent(agent_id):
+    agent = Agent.query.get_or_404(agent_id)
+    agent_schema = AgentSchema()
+    result = agent_schema.dump(agent)
+    return make_response(jsonify({'agent': result}), 200)
+
+
+# POST - Create New Agent
+@app.route('/api/agents', methods=['POST'])
+def create_agent():
+    data = request.get_json()
+    agent_schema = AgentSchema()
+    new_agent = agent_schema.load(data)
+    db.session.add(new_agent)
+    db.session.commit()
+    result = agent_schema.dump(new_agent)
+    return make_response(jsonify({'message': 'Agent created successfully', 'agent': result}), 201)
+
+
+
+# PUT - Update Agent by ID
+@app.route('/api/agents/<int:agent_id>', methods=['PUT'])
+def update_agent(agent_id):
+    agent = Agent.query.get_or_404(agent_id)
+    data = request.get_json()
+
+    agent_schema = AgentSchema()
+    updated_agent = agent_schema.load(data, instance=agent, partial=True)
+
+    db.session.commit()
+    result = agent_schema.dump(updated_agent)
+
+    return make_response(jsonify({'message': 'Agent updated successfully', 'agent': result}), 200)
+
+
+# DELETE - Remove Agent by ID
+@app.route('/api/agents/<int:agent_id>', methods=['DELETE'])
+def delete_agent(agent_id):
+    agent = Agent.query.get_or_404(agent_id)
+    db.session.delete(agent)
+    db.session.commit()
+    return make_response(jsonify({'message': 'Agent deleted successfully'}), 200)
+
+
+
+
+
+
+
+
+
+
+
+
 # DATA ANALISYS SECTION-----------------------------------------
 @app.route('/api/dashboard-data')
 def dashboard_data():
@@ -293,13 +464,13 @@ def get_dashboard_stats():
         'active_policies': db.session.query(Policy).filter(Policy.status == 'active').count(),
         'expired_policies': db.session.query(Policy).filter(Policy.status == 'expired').count(),
         'canceled_policies': db.session.query(Policy).filter(Policy.status == 'canceled').count(),
+        'total_agents': db.session.query(Agent).count(),
     }
     
     # Calcular revenue
     #stats['monthly_revenue'] = stats['active_policies'] * 150  # Ejemplo
     
     return stats
-
 
 
 
@@ -327,6 +498,16 @@ def vehicles_view():
 @app.route('/policies')
 def policies_view():
     return render_template('policies.html', title="Policies")
+
+@app.route('/agents')
+def agents_view():
+    return render_template('agents.html', title="Agents")
+
+
+#@app.route("/ai_agent")
+#def agent_page():
+#    return render_template("ai_agent.html")
+
 
 
 

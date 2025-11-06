@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+  <h3 class="mb-4 text-center">🤖 AutoGuardEC - Agente Inteligente</h3>
+  <div class="card p-4 shadow-sm">
+    <label for="prompt" class="form-label">Escribe una orden:</label>
+    <input id="prompt" class="form-control" placeholder="Ejemplo: Genera reporte de cuántas pólizas tengo">
+    <button id="btnGenerar" onclick="sendPrompt()" class="btn btn-primary mt-3 w-100">
+      Generar Reporte en PDF
+    </button>
+    <div id="loading" class="text-center mt-3" style="display:none;">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p class="mt-2">Generando reporte...</p>
+    </div>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/ai_agent.js') }}"></script>
+{% endblock %}

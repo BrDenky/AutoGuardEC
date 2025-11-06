@@ -34,6 +34,38 @@ async function loadCustomers(page = 1) {
       </tr>`;
   });
 
+// POST
+document.getElementById("customerForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const payload = {
+    first_name: document.getElementById("first_name").value,
+    last_name: document.getElementById("last_name").value,
+    address: document.getElementById("address").value,
+    phone: document.getElementById("phone").value,
+    email: document.getElementById("email").value
+  };
+
+  const res = await fetch(API, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+
+  if (res.ok) {
+    const addModal = bootstrap.Modal.getInstance(document.getElementById("addCustomerModal"));
+    addModal.hide();
+    loadCustomers();
+  } else {
+    const toast = new bootstrap.Toast(document.getElementById("toastError"));
+    toast.show();
+  }
+
+  e.target.reset();
+});
+
+
+
   // Update pagination info
   currentPage = data.current_page;
   totalPages = data.total_pages;
@@ -156,9 +188,6 @@ document.getElementById("confirmDeleteBtn").addEventListener("click", async () =
   toast.show();
 }
 });
-
-
-
 
 
 

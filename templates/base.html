@@ -19,6 +19,7 @@
             <li><a href="/customers" class="{% if request.endpoint == 'customers' %}active{% endif %}"><i class="fas fa-users"></i> Customers</a></li>
             <li><a href="/vehicles" class="{% if request.endpoint == 'vehicles' %}active{% endif %}"><i class="fas fa-car"></i> Vehicles</a></li>
             <li><a href="/policies" class="{% if request.endpoint == 'policies' %}active{% endif %}"><i class="fas fa-file-contract"></i> Policies</a></li>
+            <li><a href="/agents" class="{% if request.endpoint == 'agents' %}active{% endif %}"><i class="fas fa-file-contract"></i> Agents</a></li>
             <li><a href="#"><i class="fas fa-chart-line"></i> Analytics</a></li>
             <li><a href="#"><i class="fas fa-bell"></i> Notifications</a></li>
             <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
@@ -39,8 +40,8 @@
             </div>
             <div class="user-info">
                 <i class="fas fa-bell" style="font-size: 20px; color: #7f8c8d; cursor: pointer;"></i>
-                <div class="user-avatar">AU</div>
-                <span style="color: #2c3e50; font-weight: 500;">Admin User</span>
+                <div style="cursor: pointer;" class="user-avatar">AU</div> 
+            <!--    <span style="color: #2c3e50; font-weight: 500;">Admin User</span> -->
             </div>
         </header>
 

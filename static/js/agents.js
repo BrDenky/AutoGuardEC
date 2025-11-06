@@ -1,33 +1,31 @@
-const API = "http://127.0.0.1:5000/api/vehicles";
+const API = "http://127.0.0.1:5000/api/agents";
 
 // Variables globales
 let currentPage = 1;
 const limit = 6;
 let totalPages = 1;
 
-/* Load Vehicles - GET (Paginated) */
-async function loadVehicles(page = 1) {
+/* Load Agents - GET (Paginated) */
+async function loadAgents(page = 1) {
   const res = await fetch(`${API}?page=${page}&limit=${limit}`);
   const data = await res.json();
 
-  const tbody = document.querySelector("#vehiclesTable");
+  const tbody = document.querySelector("#agentsTable");
   tbody.innerHTML = "";
 
   // Render table rows
-  data.vehicles.forEach(v => {
+  data.agents.forEach(a => {
     tbody.innerHTML += `
       <tr>
-        <td>${v.vehicle_id}</td>
-        <td>${v.customer_id}</td>
-        <td>${v.brand}</td>
-        <td>${v.model}</td>
-        <td>${v.year || 'N/A'}</td>
-        <td>${v.license_plate}</td>
+        <td>${a.agent_id}</td>
+        <td>${a.name}</td>
+        <td>${a.phone || "-"}</td>
+        <td>${a.email}</td>
         <td>
-          <button class="btn btn-sm btn-primary edit-btn" data-id="${v.vehicle_id}">
+          <button class="btn btn-sm btn-primary edit-btn" data-id="${a.agent_id}">
             <i class="fas fa-edit"></i>
           </button>
-          <button class="btn btn-sm btn-danger delete-btn" data-id="${v.vehicle_id}">
+          <button class="btn btn-sm btn-danger delete-btn" data-id="${a.agent_id}">
             <i class="fas fa-trash-alt"></i>
           </button>
         </td>
@@ -47,72 +45,69 @@ async function loadVehicles(page = 1) {
 
 /* Pagination button handlers */
 document.getElementById("prevPage").addEventListener("click", () => {
-  if (currentPage > 1) loadVehicles(currentPage - 1);
+  if (currentPage > 1) loadAgents(currentPage - 1);
 });
 
 document.getElementById("nextPage").addEventListener("click", () => {
-  if (currentPage < totalPages) loadVehicles(currentPage + 1);
+  if (currentPage < totalPages) loadAgents(currentPage + 1);
 });
 
 /* Initial load */
-loadVehicles();
+loadAgents();
 
-/* Refresh vehicles list when clicking the "Refresh" button */
+/* Refresh agents list when clicking the "Refresh" button */
 const refreshBtn = document.getElementById("refreshBtn");
 refreshBtn.addEventListener("click", async () => {
   refreshBtn.classList.add("rotating");
-  await loadVehicles(currentPage);
+  await loadAgents();
   refreshBtn.classList.remove("rotating");
 });
 
-/* --- Add Vehicle Logic --- */
-document.getElementById("vehicleForm").addEventListener("submit", async (e) => {
+/* --- Add Agent Logic --- */
+document.getElementById("agentForm").addEventListener("submit", async (e) => {
   e.preventDefault();
-  
+
   const payload = {
-    customer_id: parseInt(document.getElementById("customer_id").value),
-    brand: document.getElementById("brand").value,
-    model: document.getElementById("model").value,
-    year: parseInt(document.getElementById("year").value) || null,
-    license_plate: document.getElementById("license_plate").value
+    name: document.getElementById("name").value,
+    phone: document.getElementById("phone").value,
+    email: document.getElementById("email").value
   };
 
-  await fetch(API, {
+  const res = await fetch(API, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload)
   });
 
-  // Close modal
-  const addModal = bootstrap.Modal.getInstance(document.getElementById("addVehicleModal"));
-  addModal.hide();
+  if (res.ok) {
+    const addModal = bootstrap.Modal.getInstance(document.getElementById("addAgentModal"));
+    addModal.hide();
+    loadAgents();
+  } else {
+    const toast = new bootstrap.Toast(document.getElementById("toastError"));
+    toast.show();
+  }
 
-  // Reset form
-  document.getElementById("vehicleForm").reset();
-
-  // Refresh table
-  loadVehicles(currentPage);
+  e.target.reset();
 });
 
-/* --- Edit Vehicle Logic --- */
+/* --- Edit Agent Logic --- */
 
 // Detect clicks on Edit buttons
 document.addEventListener("click", async (e) => {
   if (e.target.closest(".edit-btn")) {
     const id = e.target.closest(".edit-btn").dataset.id;
 
-    // Fetch vehicle data by ID
+    // Fetch agent data by ID
     const res = await fetch(`${API}/${id}`);
     const data = await res.json();
-    const vehicle = data.vehicle || data;
+    const agent = data.agent || data;
 
     // Fill modal fields
-    document.getElementById("edit_id").value = vehicle.vehicle_id;
-    document.getElementById("edit_customer_id").value = vehicle.customer_id;
-    document.getElementById("edit_brand").value = vehicle.brand;
-    document.getElementById("edit_model").value = vehicle.model;
-    document.getElementById("edit_year").value = vehicle.year || '';
-    document.getElementById("edit_license_plate").value = vehicle.license_plate;
+    document.getElementById("edit_id").value = agent.agent_id;
+    document.getElementById("edit_name").value = agent.name;
+    document.getElementById("edit_phone").value = agent.phone || "";
+    document.getElementById("edit_email").value = agent.email;
 
     // Show modal
     const editModal = new bootstrap.Modal(document.getElementById("editModal"));
@@ -127,11 +122,9 @@ document.getElementById("editForm").addEventListener("submit", async (e) => {
   const id = document.getElementById("edit_id").value;
 
   const payload = {
-    customer_id: parseInt(document.getElementById("edit_customer_id").value),
-    brand: document.getElementById("edit_brand").value,
-    model: document.getElementById("edit_model").value,
-    year: parseInt(document.getElementById("edit_year").value) || null,
-    license_plate: document.getElementById("edit_license_plate").value
+    name: document.getElementById("edit_name").value,
+    phone: document.getElementById("edit_phone").value,
+    email: document.getElementById("edit_email").value
   };
 
   await fetch(`${API}/${id}`, {
@@ -145,33 +138,33 @@ document.getElementById("editForm").addEventListener("submit", async (e) => {
   editModal.hide();
 
   // Refresh table
-  loadVehicles(currentPage);
+  loadAgents();
 });
 
-/* --- Delete Vehicle Logic --- */
-let vehicleToDelete = null;
+/* --- Delete Agent Logic --- */
+let agentToDelete = null;
 
 // Detect clicks on Delete buttons
 document.addEventListener("click", (e) => {
   const deleteBtn = e.target.closest(".delete-btn");
   if (deleteBtn) {
-    vehicleToDelete = deleteBtn.dataset.id;
+    agentToDelete = deleteBtn.dataset.id;
     const deleteModal = new bootstrap.Modal(document.getElementById("deleteModal"));
     deleteModal.show();
   }
 });
 
-// Confirm deletion when user clicks "Delete" in modal
+// Confirm deletion
 document.getElementById("confirmDeleteBtn").addEventListener("click", async () => {
-  if (!vehicleToDelete) return;
+  if (!agentToDelete) return;
 
-  const res = await fetch(`${API}/${vehicleToDelete}`, { method: "DELETE" });
+  const res = await fetch(`${API}/${agentToDelete}`, { method: "DELETE" });
   const deleteModal = bootstrap.Modal.getInstance(document.getElementById("deleteModal"));
 
   if (res.ok) {
     deleteModal.hide();
-    vehicleToDelete = null;
-    loadVehicles(currentPage);
+    agentToDelete = null;
+    loadAgents();
 
     const toast = new bootstrap.Toast(document.getElementById("toastSuccess"));
     toast.show();
@@ -180,3 +173,6 @@ document.getElementById("confirmDeleteBtn").addEventListener("click", async () =
     toast.show();
   }
 });
+
+/* Initial table load */
+loadAgents();
