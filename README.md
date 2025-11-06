@@ -47,7 +47,7 @@ Database (MySQL via SQLAlchemy ORM)
 
 ### 1️⃣ Clone the repository
 ```bash
-git clone https://github.com/yourusername/AutoGuardEC.git
+git clone https://github.com/brdenky/AutoGuardEC.git
 cd AutoGuardEC
 ```
 
