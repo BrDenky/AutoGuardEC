@@ -1,43 +1,43 @@
-# dot.env
+# dot.env - Producción
+# ------------------------------------------------------------------------
+import os
 from dotenv import load_dotenv
 load_dotenv()
+
 # Import necessary libraries
+# ------------------------------------------------------------------------
 from flask import Flask, jsonify, make_response, request, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow.sqla import SQLAlchemyAutoSchema
 from marshmallow import fields
 
-import os
-from dotenv import load_dotenv
+# Import and logic to implement OPENAI - API KEY
+# ------------------------------------------------------------------------
 #import openai
 #load_dotenv()
 #openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
-
+# APP and Docker Configuration
+# ------------------------------------------------------------------------
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
 # Connection with docker proyect
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("SQLALCHEMY_DATABASE_URI")
+#app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("SQLALCHEMY_DATABASE_URI")
 #'mysql+pymysql://root:123@localhost:3307/CarInsuranceDB?charset=utf8mb4'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:123@localhost:3307/CarInsuranceDB?charset=utf8mb4'
 db = SQLAlchemy(app)
 
 
 
 # Prueba AGENTE INTELIGENTE
+# ------------------------------------------------------------------------
 #from ai_agent import ai_bp
 #app.register_blueprint(ai_bp)
 
 
-
-
-
-
-
-
-
-# Models
-
+# Create all Models/Tables to manage data
+# ------------------------------------------------------------------------
 class Customer(db.Model):
     __tablename__ = 'Customer'
     __table_args__ = {'mysql_charset': 'utf8mb4', 'mysql_collate': 'utf8mb4_unicode_ci'}
@@ -114,10 +114,8 @@ class Agent(db.Model):
 
 
 
-
-
-# Marshmallow Schemas
-
+# Marshmallow Schemas to manage communication with SQL-ALCHEMY with JSON
+# ------------------------------------------------------------------------
 class CustomerSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = Customer
@@ -141,16 +139,21 @@ class AgentSchema(SQLAlchemyAutoSchema):
         load_instance = True
 
 
-# Initialize Database---------------------
+# Initialize Database
+# ------------------------------------------------------------------------
 
 with app.app_context():
     db.create_all()
 
-# Tables Endpoints (GET, POST, PUT, DELETE) ------------------------------------------------------ 
 
-# Customer Table
-# Endpoint GET customers con Schema
-# Endpoint GET customers with pagination
+# Necessary Endpoints to manage al interaction with Database
+# GET, POST, PUT, DELETE
+# ------------------------------------------------------------------------
+
+# CUSTOMER TABLE
+# ------------------------------------------------------------------------
+# GET with pagination
+# ========================================================================
 @app.route('/api/customers', methods=['GET'])
 def get_customers():
     # Get query parameters (default: page=1, limit=6)
@@ -176,7 +179,8 @@ def get_customers():
 
     return make_response(jsonify(response), 200)
 
-# Endpoint GET customer por ID con Schema
+# GET customer by ID
+# ========================================================================
 @app.route('/api/customers/<int:customer_id>', methods=['GET'])
 def get_customer(customer_id):
     customer = Customer.query.get_or_404(customer_id)
@@ -184,7 +188,8 @@ def get_customer(customer_id):
     result = customer_schema.dump(customer)
     return make_response(jsonify({'customer': result}), 200)
 
-# Endopoint POST customers con Schema
+# POST customer
+# ========================================================================
 @app.route('/api/customers', methods=['POST'])
 def create_customer():
     data = request.get_json()
@@ -195,7 +200,8 @@ def create_customer():
     result = customer_schema.dump(new_customer)
     return make_response(jsonify({'message': 'Customer created successfully', 'customer': result}), 201)
 
-# Endpoint PUT customers con Schema
+# PUT customer
+# ========================================================================
 @app.route('/api/customers/<int:customer_id>', methods=['PUT'])
 def update_customer(customer_id):
     customer = Customer.query.get_or_404(customer_id)
@@ -209,7 +215,8 @@ def update_customer(customer_id):
     
     return make_response(jsonify({'message': 'Customer updated successfully', 'customer': result}), 200)
 
-# Endpoint DELETE customers con Schema
+# DELETE customer
+# ========================================================================
 @app.route('/api/customers/<int:customer_id>', methods=['DELETE'])
 def delete_customer(customer_id):
     customer = Customer.query.get_or_404(customer_id)
@@ -220,8 +227,10 @@ def delete_customer(customer_id):
     return make_response(jsonify({'message': 'Customer deleted successfully'}), 200)
 
 
-# Vehicle Table
-# Endpoint GET vehicles con Schema
+# VEHICLE TABLE
+# ------------------------------------------------------------------------
+# GET vehicles with pagination
+# ========================================================================
 @app.route('/api/vehicles', methods=['GET'])
 def get_vehicles():
     # Get query parameters (default: page=1, limit=6)
@@ -247,7 +256,8 @@ def get_vehicles():
 
     return make_response(jsonify(response), 200)
 
-# Endpoint GET vehicle por ID con Schema
+# GET vehicle by ID
+# ========================================================================
 @app.route('/api/vehicles/<int:vehicle_id>', methods=['GET'])
 def get_vehicle(vehicle_id):
     vehicle = Vehicle.query.get_or_404(vehicle_id)
@@ -255,7 +265,8 @@ def get_vehicle(vehicle_id):
     result = vehicle_schema.dump(vehicle)
     return make_response(jsonify({'vehicle': result}), 200)
 
-# Endpoint POST vehicles con Schema
+# POST vehicle
+# ========================================================================
 @app.route('/api/vehicles', methods=['POST'])
 def create_vehicle():
     data = request.get_json()
@@ -266,7 +277,8 @@ def create_vehicle():
     result = vehicle_schema.dump(new_vehicle)
     return make_response(jsonify({'message': 'Vehicle created successfully', 'vehicle': result}), 201)
 
-# Endpoint PUT vehicles con Schema
+# PUT vehicle
+# ========================================================================
 @app.route('/api/vehicles/<int:vehicle_id>', methods=['PUT'])
 def update_vehicle(vehicle_id):
     vehicle = Vehicle.query.get_or_404(vehicle_id)
@@ -280,7 +292,8 @@ def update_vehicle(vehicle_id):
     
     return make_response(jsonify({'message': 'Vehicle updated successfully', 'vehicle': result}), 200)
 
-# Endpoint DELETE vehicles con Schema
+# DELETE vehicle
+# ========================================================================
 @app.route('/api/vehicles/<int:vehicle_id>', methods=['DELETE'])
 def delete_vehicle(vehicle_id):
     vehicle = Vehicle.query.get_or_404(vehicle_id)
@@ -292,8 +305,10 @@ def delete_vehicle(vehicle_id):
 
 
 
-# Policy Table
-# Endpoint GET policies con Schema
+# POLICY TABLE
+# ------------------------------------------------------------------------
+# GET policies with paginization
+# ========================================================================
 @app.route('/api/policies', methods=['GET'])
 def get_policies():
     # Get query parameters (default: page=1, limit=6)
@@ -319,7 +334,8 @@ def get_policies():
 
     return make_response(jsonify(response), 200)
 
-# Endpoint GET policy por ID con Schema
+# GET policy by ID
+# ========================================================================
 @app.route('/api/policies/<int:policy_id>', methods=['GET'])
 def get_policy(policy_id):
     policy = Policy.query.get_or_404(policy_id)
@@ -327,7 +343,8 @@ def get_policy(policy_id):
     result = policy_schema.dump(policy)
     return make_response(jsonify({'policy': result}), 200)
 
-# Endpoint POST policies con Schema
+# POST policy
+# ========================================================================
 @app.route('/api/policies', methods=['POST'])
 def create_policy():
     data = request.get_json()
@@ -338,7 +355,8 @@ def create_policy():
     result = policy_schema.dump(new_policy)
     return make_response(jsonify({'message': 'Policy created successfully', 'policy': result}), 201)
 
-# Endpoint PUT policies con Schema
+# PUT policy
+# ========================================================================
 @app.route('/api/policies/<int:policy_id>', methods=['PUT'])
 def update_policy(policy_id):
     policy = Policy.query.get_or_404(policy_id)
@@ -352,7 +370,8 @@ def update_policy(policy_id):
     
     return make_response(jsonify({'message': 'Policy updated successfully', 'policy': result}), 200)
 
-# Endpoint DELETE policies con Schema
+# DELETE policy
+# ========================================================================
 @app.route('/api/policies/<int:policy_id>', methods=['DELETE'])
 def delete_policy(policy_id):
     policy = Policy.query.get_or_404(policy_id)
@@ -362,11 +381,10 @@ def delete_policy(policy_id):
     
     return make_response(jsonify({'message': 'Policy deleted successfully'}), 200)
 
-
-
-# Agent Endpoints--------------------------------------------------------------------------------------------------
-
-# GET - Paginated Agents
+# AGENT TABLE
+# ------------------------------------------------------------------------
+# GET agent with paginization
+# ========================================================================
 @app.route('/api/agents', methods=['GET'])
 def get_agents():
     # Query parameters (default: page=1, limit=6)
@@ -392,8 +410,8 @@ def get_agents():
 
     return make_response(jsonify(response), 200)
 
-
-# GET - Single Agent by ID
+# GET agent by ID
+# ========================================================================
 @app.route('/api/agents/<int:agent_id>', methods=['GET'])
 def get_agent(agent_id):
     agent = Agent.query.get_or_404(agent_id)
@@ -401,8 +419,8 @@ def get_agent(agent_id):
     result = agent_schema.dump(agent)
     return make_response(jsonify({'agent': result}), 200)
 
-
-# POST - Create New Agent
+# POST agent
+# ========================================================================
 @app.route('/api/agents', methods=['POST'])
 def create_agent():
     data = request.get_json()
@@ -413,9 +431,8 @@ def create_agent():
     result = agent_schema.dump(new_agent)
     return make_response(jsonify({'message': 'Agent created successfully', 'agent': result}), 201)
 
-
-
-# PUT - Update Agent by ID
+# PUT agent
+# ========================================================================
 @app.route('/api/agents/<int:agent_id>', methods=['PUT'])
 def update_agent(agent_id):
     agent = Agent.query.get_or_404(agent_id)
@@ -429,21 +446,14 @@ def update_agent(agent_id):
 
     return make_response(jsonify({'message': 'Agent updated successfully', 'agent': result}), 200)
 
-
-# DELETE - Remove Agent by ID
+# DELETE agent
+# ========================================================================
 @app.route('/api/agents/<int:agent_id>', methods=['DELETE'])
 def delete_agent(agent_id):
     agent = Agent.query.get_or_404(agent_id)
     db.session.delete(agent)
     db.session.commit()
     return make_response(jsonify({'message': 'Agent deleted successfully'}), 200)
-
-
-
-
-
-
-
 
 
 

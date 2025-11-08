@@ -77,7 +77,7 @@ Create a `.env` file in the project root:
 ```env
 FLASK_APP=app.py
 FLASK_ENV=development
-SQLALCHEMY_DATABASE_URI=mysql+pymysql://root:12345@host.docker.internal:3306/autoguardec
+SQLALCHEMY_DATABASE_URI=mysql+pymysql://root:12345@localhost:3306/autoguardec
 ```
 
 ### 6️⃣ Run the app

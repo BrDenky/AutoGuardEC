@@ -1,7 +1,13 @@
+<!--
+    Index HTML
+-->
+
+<!-- From Base (Sidebar, header, ...)-->
 {% extends 'base.html' %}
 
 {% block title %}AutoGuardEC - Dashboard{% endblock %}
 
+<!-- All this will be implemented in block content / base.html-->
 {% block content %}
 <h1 class="page-title">Dashboard Overview</h1>
 
@@ -10,7 +16,7 @@
     <div class="stat-card blue">
         <div class="stat-header">
             <div>
-                <div class="stat-value">{{ total_customers }}</div>
+                <div class="stat-value">{{ total_customers }}</div> <!-- From app.py / get_dashboard_stats()-->
                 <div class="stat-label">Total Customers</div>
             </div>
             <div class="stat-icon blue">
@@ -22,7 +28,7 @@
     <div class="stat-card green">
         <div class="stat-header">
             <div>
-                <div class="stat-value">{{ active_policies }}</div>
+                <div class="stat-value">{{ active_policies }}</div> <!-- From app.py / get_dashboard_stats()-->
                 <div class="stat-label">Active Policies</div>
             </div>
             <div class="stat-icon green">
@@ -34,7 +40,7 @@
     <div class="stat-card orange">
         <div class="stat-header">
             <div>
-                <div class="stat-value">{{ total_vehicles }}</div>
+                <div class="stat-value">{{ total_vehicles }}</div> <!-- From app.py / get_dashboard_stats()-->
                 <div class="stat-label">Registered Vehicles</div>
             </div>
             <div class="stat-icon orange">
@@ -43,6 +49,19 @@
         </div>
     </div>
 
+    <div class="stat-card yellow">
+        <div class="stat-header">
+            <div>
+                <div class="stat-value">{{ total_agents }}</div> <!-- From app.py / get_dashboard_stats()-->
+                <div class="stat-label">Agents</div>
+            </div>
+            <div class="stat-icon orange">
+                <i class="fas fa-car"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Check if database contains Monthly Revenue = total sold * Unit cost -->
     <div class="stat-card purple">
         <div class="stat-header">
             <div>
@@ -59,7 +78,7 @@
 
 
 
-<!-- Chart Card -->
+<!-- Chart Card / Graphics -->
 <div class="chart-card">
   <div class="chart-header">
     <h3 class="chart-title">AutoGuardEC Analytics</h3>
@@ -74,28 +93,28 @@
     <!-- Policy Analytics -->
     <div id="policy-section" class="chart-section">
       <div class="chart-wrapper">
-        <canvas id="policyChart"></canvas>
+        <canvas id="policyChart"></canvas> <!-- Graphic drawn in dashboard_charts.js-->
       </div>
     </div>
 
     <!-- Customers Analytics -->
     <div id="customers-section" class="chart-section">
       <div class="chart-wrapper">
-        <canvas id="customerVehicleChart"></canvas>
+        <canvas id="customerVehicleChart"></canvas> <!-- Graphic drawn in dashboard_charts.js-->
       </div>
     </div>
 
-    <!-- Employment Analytics -->
+    <!-- Employment Analytics / ¿THIS IS IMPORTANT? CHECK THIS -->
     <div id="employment-section" class="chart-section">
       <div class="chart-wrapper">
-        <canvas id="employmentChart"></canvas>
+        <canvas id="employmentChart"></canvas> <!-- Graphic drawn in dashboard_charts.js-->
       </div>
    </div>
   </div>
 
-<!-- Scripts externos -->
+<!-- External Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="{{ url_for('static', filename='js/dashboard_charts.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dashboard_charts.js') }}"></script> <!-- Refer to .js-->
 
 
 
@@ -104,7 +123,7 @@
 
 
 
-<!-- Quick Actions -->
+<!-- Quick Actions / LACK OF IMPLEMENTATION-->
 <h3 style="margin-bottom: 15px; color: #2c3e50;">Quick Actions</h3>
 <div class="quick-actions">
     <a href="/customers" class="action-btn">
@@ -123,6 +142,7 @@
         <i class="fas fa-file-signature"></i>
         <div>New Agent</div>
     </a>
+    <!-- Implementation need to generate a pdf report file-->
     <a href="#" class="action-btn">
         <i class="fas fa-chart-bar"></i>
         <div>View Reports</div>
