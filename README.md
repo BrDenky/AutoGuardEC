@@ -65,11 +65,7 @@ pip install -r requirements.txt
 
 ### 4️⃣ Run MySQL in Docker
 ```bash
-docker run --name mysqlcontainer10 \
-  -e MYSQL_ROOT_PASSWORD=12345 \
-  -e MYSQL_DATABASE=autoguardec \
-  -p 3306:3306 \
-  -d mysql:8.0
+docker run --name mysqlcontainer10 -e MYSQL_ROOT_PASSWORD=12345 -e MYSQL_DATABASE=autoguardec -p 3306:3306 -d mysql:8.0
 ```
 
 ### 5️⃣ Configure environment variables
