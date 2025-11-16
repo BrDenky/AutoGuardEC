@@ -18,7 +18,11 @@ async function loadVehicles(page = 1) {
     tbody.innerHTML += `
       <tr>
         <td>${v.vehicle_id}</td>
-        <td>${v.customer_id}</td>
+        <td>
+          <button class="btn btn-link p-0 customer-qv-btn" data-id="${v.customer_id}">
+            ${v.customer_id}
+          </button>
+        </td>
         <td>${v.brand}</td>
         <td>${v.model}</td>
         <td>${v.year || 'N/A'}</td>

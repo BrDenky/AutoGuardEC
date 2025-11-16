@@ -23,10 +23,15 @@
             <li><a href="/customers" class="{% if request.endpoint == 'customers' %}active{% endif %}"><i class="fas fa-users"></i> Customers</a></li>
             <li><a href="/vehicles" class="{% if request.endpoint == 'vehicles' %}active{% endif %}"><i class="fas fa-car"></i> Vehicles</a></li>
             <li><a href="/policies" class="{% if request.endpoint == 'policies' %}active{% endif %}"><i class="fas fa-file-contract"></i> Policies</a></li>
-            <li><a href="/agents" class="{% if request.endpoint == 'agents' %}active{% endif %}"><i class="fas fa-file-contract"></i> Agents</a></li>
+            <li><a href="/agents" class="{% if request.endpoint == 'agents' %}active{% endif %}"><i class="fa-solid fa-people-line"></i> Agents</a></li>
+            <li><a href="/coverages" class="{% if request.endpoint == 'agents' %}active{% endif %}"><i class="fa-solid fa-book"></i></i> Coverages</a></li>
+            <li><a href="/premium_payments" class="{% if request.endpoint == 'agents' %}active{% endif %}"><i class="fa-solid fa-money-check-dollar"></i></i> Premium Payments</a></li>
+            <li><a href="/claims" class="{% if request.endpoint == 'agents' %}active{% endif %}"><i class="fa-solid fa-exclamation"></i></i> Claims</a></li>
+            <li><a href="/claim_payment" class="{% if request.endpoint == 'agents' %}active{% endif %}"><i class="fa-solid fa-money-bill-wave"></i></i> Claim Payment</a></li>
+            <li><a href="/policy_coverages" class="{% if request.endpoint == 'agents' %}active{% endif %}"><i class="fa-solid fa-building-shield"></i></i> Policy Coverages</a></li>
             <!-- Waiting Implementation -->
             <li><a href="#"><i class="fas fa-chart-line"></i> Analytics</a></li>
-            <li><a href="#"><i class="fas fa-bell"></i> Notifications</a></li>
+            <!--<li><a href="#"><i class="fas fa-bell"></i> Notifications</a></li> -->
             <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
         </ul>
         <!-- Repository GitHub link -->
@@ -44,6 +49,9 @@
             <div class="search-bar">
                 <input type="text" placeholder="What can I do for you?">
             </div>
+            <!--<div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="darkModeToggle">
+            </div> -->
             <div class="user-info">
                 <i class="fas fa-bell" style="font-size: 20px; color: #7f8c8d; cursor: pointer;"></i>
                 <div style="cursor: pointer;" class="user-avatar">AU</div> 
@@ -58,5 +66,11 @@
             {% endblock %}
         </main>
     </div>
+    {% block modals %}
+        <!-- Aquí insertas el Customer Quick View Modal -->
+        {% include 'customer_quickview_modal.html' %}
+    {% endblock %}
+<script src="{{ url_for('static', filename='js/customer_quickview.js') }}"></script>
+
 </body>
 </html>

@@ -1,0 +1,62 @@
+<!-- =========================== -->
+<!--   CUSTOMER QUICK VIEW MODAL -->
+<!-- =========================== -->
+<div class="modal fade" id="customerQuickViewModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+
+      <!-- HEADER -->
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">
+          <i class="fas fa-user"></i> Customer Quick View
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- BODY -->
+      <div class="modal-body">
+
+        <!-- Loading Spinner -->
+        <div id="customerLoadingSpinner" class="text-center py-4" style="display: none;">
+          <div class="spinner-border text-primary" role="status"></div>
+          <p class="mt-2">Loading customer...</p>
+        </div>
+
+        <!-- Dynamic Content -->
+        <div id="customerQuickViewContent" style="display: none;">
+          
+          <!-- Name -->
+          <h4 id="qv_customer_name" class="fw-bold mb-3"></h4>
+
+          <!-- Info Grid -->
+          <div class="row g-3">
+            <div class="col-md-6">
+              <p><strong>ID:</strong> <span id="qv_customer_id"></span></p>
+              <p><strong>Email:</strong> <span id="qv_customer_email"></span></p>
+            </div>
+            <div class="col-md-6">
+              <p><strong>Phone:</strong> <span id="qv_customer_phone"></span></p>
+              <p><strong>Address:</strong> <span id="qv_customer_address"></span></p>
+            </div>
+          </div>
+
+          <hr>
+
+          <!-- Vehicles -->
+          <h5 class="fw-bold mt-3">Vehicles</h5>
+          <ul id="qv_customer_vehicles" class="list-group small"></ul>
+
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="modal-footer">
+        <a id="customerFullProfileBtn" href="#" class="btn btn-primary">
+          <i class="fas fa-user-circle"></i> View Full Profile
+        </a>
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
