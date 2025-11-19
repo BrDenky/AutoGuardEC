@@ -41,7 +41,11 @@ async function loadClaims(page = 1) {
     tbody.innerHTML += `
       <tr>
         <td>${c.claim_id}</td>
-        <td>${c.policy_id}</td>
+        <td>
+          <button class="btn btn-link p-0 policy-qv-btn" data-id="${c.policy_id}">
+            ${c.policy_id}
+          </button>
+        </td>
         <td>${c.claim_date}</td>
         <td>${c.description}</td>
         <td>${statusBadge}</td>

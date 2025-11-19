@@ -1,0 +1,77 @@
+<!-- =========================== -->
+<!--   POLICY QUICK VIEW MODAL   -->
+<!-- =========================== -->
+<div class="modal fade" id="policyQuickViewModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+
+      <!-- HEADER -->
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">
+          <i class="fas fa-file-contract"></i> Policy Quick View
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- BODY -->
+      <div class="modal-body">
+
+        <!-- Loading Spinner -->
+        <div id="policyLoadingSpinner" class="text-center py-4" style="display: none;">
+          <div class="spinner-border text-primary" role="status"></div>
+          <p class="mt-2">Loading policy...</p>
+        </div>
+
+        <!-- Dynamic Content -->
+        <div id="policyQuickViewContent" style="display: none;">
+
+          <!-- Policy Title -->
+          <h4 id="qv_policy_title" class="fw-bold mb-3"></h4>
+
+          <!-- Info Grid -->
+          <div class="row g-3">
+            <div class="col-md-6">
+              <p><strong>ID:</strong> <span id="qv_policy_id"></span></p>
+              <p><strong>Status:</strong> <span id="qv_policy_status"></span></p>
+              <p><strong>Start Date:</strong> <span id="qv_policy_start"></span></p>
+            </div>
+            <div class="col-md-6">
+              <p><strong>Customer:</strong> <span id="qv_policy_customer"></span></p>
+              <p><strong>Vehicle:</strong> <span id="qv_policy_vehicle"></span></p>
+              <p><strong>Agent:</strong> <span id="qv_policy_agent"></span></p>
+              <p><strong>End Date:</strong> <span id="qv_policy_end"></span></p>
+            </div>
+          </div>
+
+          <hr>
+
+          <!-- Coverages -->
+          <h5 class="fw-bold mt-3">Coverages</h5>
+          <ul id="qv_policy_coverages" class="list-group small"></ul>
+
+          <hr>
+
+          <!-- Claims -->
+          <h5 class="fw-bold mt-3">Claims</h5>
+          <ul id="qv_policy_claims" class="list-group small"></ul>
+
+          <hr>
+
+          <!-- Premium Payments -->
+          <h5 class="fw-bold mt-3">Premium Payments</h5>
+          <ul id="qv_policy_payments" class="list-group small"></ul>
+
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="modal-footer">
+        <a id="policyFullProfileBtn" href="#" class="btn btn-primary">
+          <i class="fas fa-folder-open"></i> View Full Policy
+        </a>
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>

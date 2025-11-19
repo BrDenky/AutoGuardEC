@@ -68,9 +68,17 @@
     </div>
     {% block modals %}
         <!-- Aquí insertas el Customer Quick View Modal -->
-        {% include 'customer_quickview_modal.html' %}
+        {% include 'quickmodals/customer_quickview.html' %}
+        {% include 'quickmodals/vehicle_quickview.html' %}
+        {% include 'quickmodals/agent_quickview.html' %}
+        {% include 'quickmodals/policy_quickview.html' %}
+        {% include 'quickmodals/claim_quickview.html' %}
     {% endblock %}
-<script src="{{ url_for('static', filename='js/customer_quickview.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dinamic_modals/customer_quickview.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dinamic_modals/vehicle_quickview.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dinamic_modals/agent_quickview.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dinamic_modals/policy_quickview.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dinamic_modals/claim_quickview.js') }}"></script>
 
 </body>
 </html>

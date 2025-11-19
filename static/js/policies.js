@@ -36,9 +36,21 @@ async function loadPolicies(page = 1) {
     tbody.innerHTML += `
       <tr>
         <td>${p.policy_id}</td>
-        <td>${p.customer_id}</td>
-        <td>${p.vehicle_id}</td>
-        <td>${p.agent_id}</td>
+        <td>
+          <button class="btn btn-link p-0 customer-qv-btn" data-id="${p.customer_id}">
+            ${p.customer_id}
+          </button>
+        </td>
+        <td>
+          <button class="btn btn-link p-0 vehicle-qv-btn" data-id="${p.vehicle_id}">
+            ${p.vehicle_id}
+          </button>
+        </td>
+        <td>
+          <button class="btn btn-link p-0 agent-qv-btn" data-id="${p.agent_id}">
+            ${p.agent_id}
+          </button>
+        </td>
         <td>${p.start_date}</td>
         <td>${p.end_date}</td>
         <td>${statusBadge}</td>

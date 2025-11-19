@@ -380,12 +380,44 @@ def get_vehicles():
 
 # GET vehicle by ID
 # ========================================================================
+# @app.route('/api/vehicles/<int:vehicle_id>', methods=['GET'])
+# def get_vehicle(vehicle_id):
+#     vehicle = Vehicle.query.get_or_404(vehicle_id)
+#     vehicle_schema = VehicleSchema()
+#     result = vehicle_schema.dump(vehicle)
+#     return make_response(jsonify({'vehicle': result}), 200)
+
 @app.route('/api/vehicles/<int:vehicle_id>', methods=['GET'])
 def get_vehicle(vehicle_id):
     vehicle = Vehicle.query.get_or_404(vehicle_id)
-    vehicle_schema = VehicleSchema()
-    result = vehicle_schema.dump(vehicle)
-    return make_response(jsonify({'vehicle': result}), 200)
+
+    # Serializar pólizas del vehículo
+    policies = []
+    for p in vehicle.policies:
+        policies.append({
+            "policy_id": p.policy_id,
+            "status": p.status,
+            "start_date": p.start_date.isoformat() if p.start_date else None,
+            "end_date": p.end_date.isoformat() if p.end_date else None,
+        })
+
+    # Título para el modal (Brand Model Year)
+    title = f"{vehicle.brand} {vehicle.model} ({vehicle.year})"
+
+    # JSON EXACTAMENTE como lo espera vehicle_quickview.js
+    response = {
+        "vehicle_id": vehicle.vehicle_id,
+        "customer_id": vehicle.customer_id,
+        "title": title,
+        "brand": vehicle.brand,
+        "model": vehicle.model,
+        "year": vehicle.year,
+        "license_plate": vehicle.license_plate,
+        "policies": policies
+    }
+
+    return jsonify(response), 200
+
 
 # POST vehicle
 # ========================================================================
@@ -458,12 +490,77 @@ def get_policies():
 
 # GET policy by ID
 # ========================================================================
+# @app.route('/api/policies/<int:policy_id>', methods=['GET'])
+# def get_policy(policy_id):
+#     policy = Policy.query.get_or_404(policy_id)
+#     policy_schema = PolicySchema()
+#     result = policy_schema.dump(policy)
+#     return make_response(jsonify({'policy': result}), 200)
+
 @app.route('/api/policies/<int:policy_id>', methods=['GET'])
 def get_policy(policy_id):
     policy = Policy.query.get_or_404(policy_id)
-    policy_schema = PolicySchema()
-    result = policy_schema.dump(policy)
-    return make_response(jsonify({'policy': result}), 200)
+
+    # Serialize customer
+    customer = {
+        "customer_id": policy.customer.customer_id,
+        "name": f"{policy.customer.first_name} {policy.customer.last_name}"
+    }
+
+    # Serialize vehicle
+    vehicle = {
+        "vehicle_id": policy.vehicle.vehicle_id,
+        "brand": policy.vehicle.brand,
+        "model": policy.vehicle.model,
+        "license_plate": policy.vehicle.license_plate
+    }
+
+    # Serialize agent
+    agent = {
+        "agent_id": policy.agent.agent_id,
+        "name": policy.agent.name
+    }
+
+    # Serialize coverages
+    coverages = [
+        {
+            "coverage_id": c.coverage_id,
+            "name": c.name,
+            "type": c.type if hasattr(c, "type") else None
+        } for c in policy.coverages
+    ]
+
+    # Serialize claims
+    claims = [
+        {
+            "claim_id": cl.claim_id,
+            "status": cl.status
+        } for cl in policy.claims
+    ]
+
+    # Serialize premium payments
+    premium_payments = [
+        {
+            "payment_id": p.payment_id,
+            "amount": p.amount
+        } for p in policy.premium_payments
+    ]
+
+    response = {
+        "policy_id": policy.policy_id,
+        "start_date": policy.start_date.isoformat(),
+        "end_date": policy.end_date.isoformat(),
+        "status": policy.status,
+        "customer": customer,
+        "vehicle": vehicle,
+        "agent": agent,
+        "coverages": coverages,
+        "claims": claims,
+        "premium_payments": premium_payments
+    }
+
+    return jsonify(response), 200
+
 
 # POST policy
 # ========================================================================
@@ -534,12 +631,37 @@ def get_agents():
 
 # GET agent by ID
 # ========================================================================
+# @app.route('/api/agents/<int:agent_id>', methods=['GET'])
+# def get_agent(agent_id):
+#     agent = Agent.query.get_or_404(agent_id)
+#     agent_schema = AgentSchema()
+#     result = agent_schema.dump(agent)
+#     return make_response(jsonify({'agent': result}), 200)
+
 @app.route('/api/agents/<int:agent_id>', methods=['GET'])
 def get_agent(agent_id):
     agent = Agent.query.get_or_404(agent_id)
-    agent_schema = AgentSchema()
-    result = agent_schema.dump(agent)
-    return make_response(jsonify({'agent': result}), 200)
+
+    # Serializar pólizas asignadas al agente
+    policies = []
+    for p in agent.policies:
+        policies.append({
+            "policy_id": p.policy_id,
+            "status": getattr(p, "status", None),
+            "start_date": p.start_date.isoformat() if getattr(p, "start_date", None) else None,
+            "end_date": p.end_date.isoformat() if getattr(p, "end_date", None) else None
+        })
+
+    response = {
+        "agent_id": agent.agent_id,
+        "name": agent.name,
+        "email": agent.email,
+        "phone": agent.phone,
+        "policies": policies
+    }
+
+    return jsonify(response), 200
+
 
 # POST agent
 # ========================================================================
@@ -735,11 +857,38 @@ def get_claims():
 
 # GET claim by ID
 # ========================================================================
+# @app.route('/api/claims/<int:claim_id>', methods=['GET'])
+# def get_claim(claim_id):
+#     claim = Claim.query.get_or_404(claim_id)
+#     schema = ClaimSchema()
+#     return make_response(jsonify({"claim": schema.dump(claim)}), 200)
+
 @app.route('/api/claims/<int:claim_id>', methods=['GET'])
 def get_claim(claim_id):
     claim = Claim.query.get_or_404(claim_id)
-    schema = ClaimSchema()
-    return make_response(jsonify({"claim": schema.dump(claim)}), 200)
+
+    # Serialize claim payments
+    claim_payments = [
+        {
+            "claim_payment_id": cp.claim_payment_id,
+            "payment_date": cp.payment_date.isoformat(),
+            "amount": float(cp.amount)  # convertir Decimal → float
+        }
+        for cp in claim.claim_payments
+    ]
+
+    response = {
+        "claim_id": claim.claim_id,
+        "policy_id": claim.policy_id,
+        "claim_date": claim.claim_date.isoformat(),
+        "description": claim.description,
+        "status": claim.status,
+        "claim_payments": claim_payments
+    }
+
+    return jsonify(response), 200
+
+
 
 # PUT claim
 # ========================================================================

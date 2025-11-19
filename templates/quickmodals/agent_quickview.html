@@ -1,0 +1,61 @@
+<!-- =========================== -->
+<!--    AGENT QUICK VIEW MODAL   -->
+<!-- =========================== -->
+<div class="modal fade" id="agentQuickViewModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+
+      <!-- HEADER -->
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">
+          <i class="fas fa-user-tie"></i> Agent Quick View
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- BODY -->
+      <div class="modal-body">
+
+        <!-- Loading Spinner -->
+        <div id="agentLoadingSpinner" class="text-center py-4" style="display: none;">
+          <div class="spinner-border text-primary" role="status"></div>
+          <p class="mt-2">Loading agent...</p>
+        </div>
+
+        <!-- Dynamic Content -->
+        <div id="agentQuickViewContent" style="display: none;">
+
+          <!-- Name -->
+          <h4 id="qv_agent_name" class="fw-bold mb-3"></h4>
+
+          <!-- Info Grid -->
+          <div class="row g-3">
+            <div class="col-md-6">
+              <p><strong>ID:</strong> <span id="qv_agent_id"></span></p>
+              <p><strong>Email:</strong> <span id="qv_agent_email"></span></p>
+            </div>
+            <div class="col-md-6">
+              <p><strong>Phone:</strong> <span id="qv_agent_phone"></span></p>
+            </div>
+          </div>
+
+          <hr>
+
+          <!-- Policies -->
+          <h5 class="fw-bold mt-3">Policies</h5>
+          <ul id="qv_agent_policies" class="list-group small"></ul>
+
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="modal-footer">
+        <a id="agentFullProfileBtn" href="#" class="btn btn-primary">
+          <i class="fas fa-id-card-alt"></i> View Full Profile
+        </a>
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>

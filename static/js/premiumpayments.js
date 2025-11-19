@@ -20,7 +20,11 @@ async function loadPayments(page = 1) {
     tbody.innerHTML += `
       <tr>
         <td>${p.payment_id}</td>
-        <td>${p.policy_id}</td>
+        <td>
+          <button class="btn btn-link p-0 policy-qv-btn" data-id="${p.policy_id}">
+            ${p.policy_id}
+          </button>
+        </td>
         <td>${p.payment_date}</td>
         <td>$${p.amount}</td>
         <td>

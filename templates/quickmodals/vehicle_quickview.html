@@ -1,0 +1,65 @@
+<!-- =========================== -->
+<!--   VEHICLE QUICK VIEW MODAL  -->
+<!-- =========================== -->
+<div class="modal fade" id="vehicleQuickViewModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+
+      <!-- HEADER -->
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">
+          <i class="fas fa-car"></i> Vehicle Quick View
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- BODY -->
+      <div class="modal-body">
+
+        <!-- Loading Spinner -->
+        <div id="vehicleLoadingSpinner" class="text-center py-4" style="display: none;">
+          <div class="spinner-border text-primary" role="status"></div>
+          <p class="mt-2">Loading vehicle...</p>
+        </div>
+
+        <!-- Dynamic Content -->
+        <div id="vehicleQuickViewContent" style="display: none;">
+
+          <!-- Vehicle Title -->
+          <h4 id="qv_vehicle_title" class="fw-bold mb-3"></h4>
+
+          <!-- Info Grid -->
+          <div class="row g-3">
+            <div class="col-md-6">
+              <p><strong>ID:</strong> <span id="qv_vehicle_id"></span></p>
+              <p><strong>Brand:</strong> <span id="qv_vehicle_brand"></span></p>
+              <p><strong>Model:</strong> <span id="qv_vehicle_model"></span></p>
+            </div>
+
+            <div class="col-md-6">
+              <p><strong>Year:</strong> <span id="qv_vehicle_year"></span></p>
+              <p><strong>License Plate:</strong> <span id="qv_vehicle_plate"></span></p>
+              <p><strong>Customer ID:</strong> <span id="qv_vehicle_customer_id"></span></p>
+            </div>
+          </div>
+
+          <hr>
+
+          <!-- Policies -->
+          <h5 class="fw-bold mt-3">Policies</h5>
+          <ul id="qv_vehicle_policies" class="list-group small"></ul>
+
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="modal-footer">
+        <a id="vehicleFullProfileBtn" href="#" class="btn btn-primary">
+          <i class="fas fa-car-side"></i> View Full Vehicle Profile
+        </a>
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>

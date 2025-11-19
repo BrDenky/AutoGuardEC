@@ -20,7 +20,11 @@ async function loadClaimPayments(page = 1) {
     tbody.innerHTML += `
       <tr>
         <td>${p.claim_payment_id}</td>
-        <td>${p.claim_id}</td>
+        <td>
+          <button class="btn btn-link p-0 claim-qv-btn" data-id="${p.claim_id}">
+            ${p.claim_id}
+          </button>
+        </td>
         <td>${p.payment_date}</td>
         <td>$${p.amount}</td>
         <td>
