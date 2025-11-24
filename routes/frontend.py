@@ -1,6 +1,6 @@
-"""
-Frontend routes blueprint.
-"""
+# ===============================================================================
+# Frontend routes blueprints
+# ===============================================================================
 
 from flask import Blueprint, render_template
 from routes.dashboard import get_dashboard_stats
@@ -8,6 +8,8 @@ from routes.dashboard import get_dashboard_stats
 frontend_bp = Blueprint('frontend', __name__)
 
 
+# Frontend routes
+# ===============================================================================
 @frontend_bp.route('/')
 def home():
     """Render home page with dashboard statistics."""
@@ -17,54 +19,72 @@ def home():
                          **stats)
 
 
+# Customer routes
+# ===============================================================================
 @frontend_bp.route('/customers')
 def customers_view():
     """Render customers page."""
     return render_template('customers.html', title="Customers")
 
 
+# Vehicle routes
+# ===============================================================================
 @frontend_bp.route('/vehicles')
 def vehicles_view():
     """Render vehicles page."""
     return render_template('vehicles.html', title="Vehicles")
 
 
+# Policy routes
+# ===============================================================================
 @frontend_bp.route('/policies')
 def policies_view():
     """Render policies page."""
     return render_template('policies.html', title="Policies")
 
 
+# Agent routes
+# ===============================================================================
 @frontend_bp.route('/agents')
 def agents_view():
     """Render agents page."""
     return render_template('agents.html', title="Agents")
 
 
+# Coverage routes
+# ===============================================================================
 @frontend_bp.route('/coverages')
 def coverages_view():
     """Render coverages page."""
     return render_template('coverages.html', title="Coverages")
 
 
+# Premium Payment routes
+# ===============================================================================
 @frontend_bp.route('/premium_payments')
 def premium_payments_view():
     """Render premium payments page."""
     return render_template('premiumpayments.html', title="Premium_Payments")
 
 
+# Claim routes
+# ===============================================================================
 @frontend_bp.route('/claims')
 def claims_view():
     """Render claims page."""
     return render_template('claims.html', title="Claims")
 
 
+# Claim Payment routes
+# ===============================================================================
 @frontend_bp.route('/claim_payment')
 def claim_payments_view():
     """Render claim payments page."""
     return render_template('claimpayments.html', title="Claim_Payment")
 
 
+# Policy Coverage routes
+# ===============================================================================
 @frontend_bp.route('/policy_coverages')
 def policy_coverages_view():
     """Render policy coverages page."""

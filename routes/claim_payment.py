@@ -1,6 +1,6 @@
-"""
-ClaimPayment routes blueprint.
-"""
+# ===============================================================================
+# ClaimPayment routes blueprints
+# ===============================================================================
 
 from flask import Blueprint, request, jsonify, make_response
 from extensions import db
@@ -10,6 +10,8 @@ from schemas.claim_payment import ClaimPaymentSchema
 claim_payment_bp = Blueprint('claim_payments', __name__)
 
 
+# Get all claim payments with pagination
+# ===============================================================================
 @claim_payment_bp.route('/api/claim_payments/', methods=['GET'])
 def get_claim_payments():
     """Get all claim payments with pagination."""
@@ -33,6 +35,8 @@ def get_claim_payments():
     return make_response(jsonify(response), 200)
 
 
+# Get claim payment by ID
+# ===============================================================================
 @claim_payment_bp.route('/api/claim_payments/<int:payment_id>', methods=['GET'])
 def get_claim_payment(payment_id):
     """Get a specific claim payment by ID."""
@@ -41,6 +45,8 @@ def get_claim_payment(payment_id):
     return make_response(jsonify({"claim_payment": schema.dump(payment)}), 200)
 
 
+# Update claim payment
+# ===============================================================================
 @claim_payment_bp.route('/api/claim_payments/<int:payment_id>', methods=['PUT'])
 def update_claim_payment(payment_id):
     """Update an existing claim payment."""
@@ -57,6 +63,8 @@ def update_claim_payment(payment_id):
     }), 200)
 
 
+# Delete claim payment
+# ===============================================================================
 @claim_payment_bp.route('/api/claim_payments/<int:payment_id>', methods=['DELETE'])
 def delete_claim_payment(payment_id):
     """Delete a claim payment."""

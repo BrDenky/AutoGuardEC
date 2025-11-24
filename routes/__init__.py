@@ -1,7 +1,7 @@
-"""
-Routes package initialization.
-Imports all blueprints to make them available.
-"""
+# ===============================================================================
+# ROUTES AutoGuardEC - Car Insurance Management System
+# Import blueprints to make them available
+# ===============================================================================
 
 from routes.customer import customer_bp
 from routes.vehicle import vehicle_bp

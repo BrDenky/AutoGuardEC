@@ -1,6 +1,6 @@
-"""
-Customer routes blueprint.
-"""
+# ===============================================================================
+# Customer routes blueprints
+# ===============================================================================
 
 from flask import Blueprint, request, jsonify, make_response
 from extensions import db
@@ -10,6 +10,8 @@ from schemas.customer import CustomerSchema
 customer_bp = Blueprint('customers', __name__)
 
 
+# Get all customers with pagination
+# ===============================================================================
 @customer_bp.route('/api/customers', methods=['GET'])
 def get_customers():
     # Get query parameters (default: page=1, limit=6)
@@ -44,6 +46,9 @@ def get_customers():
 #     result = customer_schema.dump(customer)
 #     return make_response(jsonify({'customer': result}), 200)
 
+
+# GET customer by ID
+# ===============================================================================
 @customer_bp.route('/api/customers/<int:customer_id>', methods=['GET'])
 def get_customer(customer_id):
     customer = Customer.query.get_or_404(customer_id)
@@ -74,6 +79,7 @@ def get_customer(customer_id):
 
     return jsonify(response), 200
 
+
 # POST customer
 # ========================================================================
 @customer_bp.route('/api/customers', methods=['POST'])
@@ -85,6 +91,7 @@ def create_customer():
     db.session.commit()
     result = customer_schema.dump(new_customer)
     return make_response(jsonify({'message': 'Customer created successfully', 'customer': result}), 201)
+
 
 # PUT customer
 # ========================================================================
@@ -100,6 +107,7 @@ def update_customer(customer_id):
     result = customer_schema.dump(updated_customer)
     
     return make_response(jsonify({'message': 'Customer updated successfully', 'customer': result}), 200)
+
 
 # DELETE customer
 # ========================================================================

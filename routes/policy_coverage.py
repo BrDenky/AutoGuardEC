@@ -1,6 +1,6 @@
-"""
-PolicyCoverage routes blueprint.
-"""
+# ===============================================================================
+# PolicyCoverage routes blueprints
+# ===============================================================================
 
 from flask import Blueprint, request, jsonify, make_response
 from extensions import db
@@ -10,6 +10,8 @@ from schemas.policy_coverage import PolicyCoverageSchema
 policy_coverage_bp = Blueprint('policy_coverages', __name__)
 
 
+# Get all policy coverages with pagination
+# ===============================================================================
 @policy_coverage_bp.route('/api/policy_coverages/', methods=['GET'])
 def get_policy_coverages():
     """Get all policy coverages with pagination."""
@@ -33,6 +35,8 @@ def get_policy_coverages():
     return make_response(jsonify(response), 200)
 
 
+# Get policy coverage by ID
+# ===============================================================================
 @policy_coverage_bp.route('/api/policy_coverages/<int:pc_id>', methods=['GET'])
 def get_policy_coverage(pc_id):
     """Get a specific policy coverage by ID."""
@@ -41,6 +45,8 @@ def get_policy_coverage(pc_id):
     return make_response(jsonify({"policy_coverage": schema.dump(pc)}), 200)
 
 
+# Update policy coverage
+# ===============================================================================
 @policy_coverage_bp.route('/api/policy_coverages/<int:pc_id>', methods=['PUT'])
 def update_policy_coverage(pc_id):
     """Update an existing policy coverage."""
@@ -57,6 +63,8 @@ def update_policy_coverage(pc_id):
     }), 200)
 
 
+# Delete policy coverage
+# ===============================================================================
 @policy_coverage_bp.route('/api/policy_coverages/<int:pc_id>', methods=['DELETE'])
 def delete_policy_coverage(pc_id):
     """Delete a policy coverage."""

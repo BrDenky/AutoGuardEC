@@ -1,13 +1,12 @@
-"""
-PremiumPayment model definition.
-"""
+# ===============================================================================
+# PremiumPayment model definition.
+# ===============================================================================
 
 from extensions import db
 
-
+# PremiumPayment table
+# ===============================================================================
 class PremiumPayment(db.Model):
-    """PremiumPayment model representing premium payments for policies."""
-    
     __tablename__ = 'PremiumPayment'
     __table_args__ = {'mysql_charset': 'utf8mb4', 'mysql_collate': 'utf8mb4_unicode_ci'}
 
@@ -16,5 +15,6 @@ class PremiumPayment(db.Model):
     payment_date = db.Column(db.String(100), nullable=False)
     amount = db.Column(db.Numeric(10, 2), nullable=False)
 
-    # Relationships
+    # PremiumPayment relationships
+    # ===============================================================================
     policy = db.relationship('Policy', back_populates='premium_payments')

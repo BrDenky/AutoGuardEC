@@ -1,13 +1,12 @@
-"""
-Agent model definition.
-"""
+# ===============================================================================
+# Agent model definition.
+# ===============================================================================
 
 from extensions import db
 
-
+# Agent table
+# ===============================================================================
 class Agent(db.Model):
-    """Agent model representing insurance agents."""
-    
     __tablename__ = 'Agent'
     __table_args__ = {'mysql_charset': 'utf8mb4', 'mysql_collate': 'utf8mb4_unicode_ci'}
 
@@ -16,5 +15,6 @@ class Agent(db.Model):
     phone = db.Column(db.String(20))
     email = db.Column(db.String(50), unique=True)
 
-    # Relationships
+    # Agent relationships
+    # ===============================================================================
     policies = db.relationship('Policy', back_populates='agent', cascade='all, delete-orphan')

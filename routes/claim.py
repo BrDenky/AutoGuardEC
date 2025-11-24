@@ -1,6 +1,6 @@
-"""
-Claim routes blueprint.
-"""
+# ===============================================================================
+# Claim routes blueprints
+# ===============================================================================
 
 from flask import Blueprint, request, jsonify, make_response
 from extensions import db
@@ -10,6 +10,8 @@ from schemas.claim import ClaimSchema
 claim_bp = Blueprint('claims', __name__)
 
 
+# Get all claims with pagination
+# ===============================================================================
 @claim_bp.route('/api/claims/', methods=['GET'])
 def get_claims():
     """Get all claims with pagination."""
@@ -33,6 +35,8 @@ def get_claims():
     return make_response(jsonify(response), 200)
 
 
+# Get claim by ID
+# ===============================================================================
 @claim_bp.route('/api/claims/<int:claim_id>', methods=['GET'])
 def get_claim(claim_id):
     """Get a specific claim by ID."""
@@ -60,6 +64,8 @@ def get_claim(claim_id):
     return jsonify(response), 200
 
 
+# Update claim
+# ===============================================================================
 @claim_bp.route('/api/claims/<int:claim_id>', methods=['PUT'])
 def update_claim(claim_id):
     """Update an existing claim."""
@@ -76,6 +82,8 @@ def update_claim(claim_id):
     }), 200)
 
 
+# Delete claim
+# ===============================================================================
 @claim_bp.route('/api/claims/<int:claim_id>', methods=['DELETE'])
 def delete_claim(claim_id):
     """Delete a claim."""

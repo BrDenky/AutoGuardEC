@@ -1,13 +1,11 @@
-"""
-Claim model definition.
-"""
+# ===============================================================================
+# Claim model definition.
+# ===============================================================================
 
 from extensions import db
 
-
+# Claim table
 class Claim(db.Model):
-    """Claim model representing insurance claims."""
-    
     __tablename__ = 'Claim'
     __table_args__ = {'mysql_charset': 'utf8mb4', 'mysql_collate': 'utf8mb4_unicode_ci'}
 
@@ -17,6 +15,7 @@ class Claim(db.Model):
     description = db.Column(db.Text, nullable=False)
     status = db.Column(db.Enum('open', 'closed', 'in review'))
 
-    # Relationships
+    # Claim relationships
+    # ===============================================================================
     policy = db.relationship('Policy', back_populates='claims')
     claim_payments = db.relationship('ClaimPayment', back_populates='claim', cascade='all, delete-orphan')

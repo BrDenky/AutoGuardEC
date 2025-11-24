@@ -1,6 +1,6 @@
-"""
-PremiumPayment routes blueprint.
-"""
+# ===============================================================================
+# PremiumPayment routes blueprints
+# ===============================================================================
 
 from flask import Blueprint, request, jsonify, make_response
 from extensions import db
@@ -10,6 +10,8 @@ from schemas.premium_payment import PremiumPaymentSchema
 premium_payment_bp = Blueprint('premium_payments', __name__)
 
 
+# Get all premium payments with pagination
+# ===============================================================================
 @premium_payment_bp.route('/api/premium_payments/', methods=['GET'])
 def get_premium_payments():
     """Get all premium payments with pagination."""
@@ -33,6 +35,8 @@ def get_premium_payments():
     return make_response(jsonify(response), 200)
 
 
+# Get premium payment by ID
+# ===============================================================================
 @premium_payment_bp.route('/api/premium_payments/<int:payment_id>', methods=['GET'])
 def get_premium_payment(payment_id):
     """Get a specific premium payment by ID."""
@@ -41,6 +45,8 @@ def get_premium_payment(payment_id):
     return make_response(jsonify({"premium_payment": schema.dump(payment)}), 200)
 
 
+# Update premium payment
+# ===============================================================================
 @premium_payment_bp.route('/api/premium_payments/<int:payment_id>', methods=['PUT'])
 def update_premium_payment(payment_id):
     """Update an existing premium payment."""
@@ -57,6 +63,8 @@ def update_premium_payment(payment_id):
     }), 200)
 
 
+# Delete premium payment
+# ===============================================================================
 @premium_payment_bp.route('/api/premium_payments/<int:payment_id>', methods=['DELETE'])
 def delete_premium_payment(payment_id):
     """Delete a premium payment."""

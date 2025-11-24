@@ -1,13 +1,12 @@
-"""
-PolicyCoverage model definition.
-"""
+# ===============================================================================
+# PolicyCoverage model definition.
+# ===============================================================================
 
 from extensions import db
 
-
+# PolicyCoverage table
+# ===============================================================================
 class PolicyCoverage(db.Model):
-    """PolicyCoverage association table linking policies and coverages."""
-    
     __tablename__ = 'PolicyCoverage'
     __table_args__ = {'mysql_charset': 'utf8mb4', 'mysql_collate': 'utf8mb4_unicode_ci'}
 

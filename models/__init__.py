@@ -1,7 +1,8 @@
-"""
-Models package initialization.
-Imports all models to make them available for SQLAlchemy.
-"""
+# ===============================================================================
+# Models package initialization.
+# Imports all models to make them available for SQLAlchemy.
+# ===============================================================================
+
 
 from models.customer import Customer
 from models.vehicle import Vehicle

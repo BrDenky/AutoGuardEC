@@ -1,6 +1,6 @@
-"""
-Agent routes blueprint.
-"""
+# ===============================================================================
+# Agent routes blueprints
+# ===============================================================================
 
 from flask import Blueprint, request, jsonify, make_response
 from extensions import db
@@ -10,6 +10,8 @@ from schemas.agent import AgentSchema
 agent_bp = Blueprint('agents', __name__)
 
 
+# Get all agents with pagination
+# ===============================================================================
 @agent_bp.route('/api/agents/', methods=['GET'])
 def get_agents():
     """Get all agents with pagination."""
@@ -33,6 +35,8 @@ def get_agents():
     return make_response(jsonify(response), 200)
 
 
+# Get agent by ID
+# ===============================================================================
 @agent_bp.route('/api/agents/<int:agent_id>', methods=['GET'])
 def get_agent(agent_id):
     """Get a specific agent by ID."""
@@ -59,6 +63,8 @@ def get_agent(agent_id):
     return jsonify(response), 200
 
 
+# Create agent
+# ===============================================================================
 @agent_bp.route('/api/agents', methods=['POST'])
 def create_agent():
     """Create a new agent."""
@@ -71,6 +77,8 @@ def create_agent():
     return make_response(jsonify({'message': 'Agent created successfully', 'agent': result}), 201)
 
 
+# Update agent
+# ===============================================================================
 @agent_bp.route('/api/agents/<int:agent_id>', methods=['PUT'])
 def update_agent(agent_id):
     """Update an existing agent."""
@@ -86,6 +94,8 @@ def update_agent(agent_id):
     return make_response(jsonify({'message': 'Agent updated successfully', 'agent': result}), 200)
 
 
+# Delete agent
+# ===============================================================================
 @agent_bp.route('/api/agents/<int:agent_id>', methods=['DELETE'])
 def delete_agent(agent_id):
     """Delete an agent."""

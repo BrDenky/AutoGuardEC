@@ -1,6 +1,6 @@
-"""
-Coverage routes blueprint.
-"""
+# ===============================================================================
+# Coverage routes blueprints
+# ===============================================================================
 
 from flask import Blueprint, request, jsonify, make_response
 from extensions import db
@@ -10,6 +10,8 @@ from schemas.coverage import CoverageSchema
 coverage_bp = Blueprint('coverages', __name__)
 
 
+# Get all coverages with pagination
+# ===============================================================================
 @coverage_bp.route('/api/coverages/', methods=['GET'])
 def get_coverages():
     """Get all coverages with pagination."""
@@ -33,6 +35,8 @@ def get_coverages():
     return make_response(jsonify(response), 200)
 
 
+# Get coverage by ID
+# ===============================================================================
 @coverage_bp.route('/api/coverages/<int:coverage_id>', methods=['GET'])
 def get_coverage(coverage_id):
     """Get a specific coverage by ID."""
@@ -42,6 +46,8 @@ def get_coverage(coverage_id):
     return make_response(jsonify({"coverage": result}), 200)
 
 
+# Update coverage
+# ===============================================================================
 @coverage_bp.route('/api/coverages/<int:coverage_id>', methods=['PUT'])
 def update_coverage(coverage_id):
     """Update an existing coverage."""
@@ -57,6 +63,8 @@ def update_coverage(coverage_id):
     return make_response(jsonify({'message': 'Coverage updated successfully', 'coverage': result}), 200)
 
 
+# Delete coverage
+# ===============================================================================
 @coverage_bp.route('/api/coverages/<int:coverage_id>', methods=['DELETE'])
 def delete_coverage(coverage_id):
     """Delete a coverage."""

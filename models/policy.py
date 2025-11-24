@@ -1,13 +1,12 @@
-"""
-Policy model definition.
-"""
+# ===============================================================================
+# Policy model definition.
+# ===============================================================================
 
 from extensions import db
 
-
+# Policy table
+# ===============================================================================
 class Policy(db.Model):
-    """Policy model representing insurance policies."""
-    
     __tablename__ = 'Policy'
     __table_args__ = {'mysql_charset': 'utf8mb4', 'mysql_collate': 'utf8mb4_unicode_ci'}
     
@@ -19,7 +18,8 @@ class Policy(db.Model):
     end_date = db.Column(db.Date, nullable=False)
     status = db.Column(db.Enum('active', 'expired', 'canceled', 'arrears'))
 
-    # Relationships
+    # Policy relationships
+    # ===============================================================================
     customer = db.relationship('Customer', back_populates='policies')
     vehicle = db.relationship('Vehicle', back_populates='policies')
     agent = db.relationship('Agent', back_populates='policies')

@@ -1,6 +1,6 @@
-"""
-Vehicle routes blueprint.
-"""
+# ===============================================================================
+# Vehicle routes blueprints
+# ===============================================================================
 
 from flask import Blueprint, request, jsonify, make_response
 from extensions import db
@@ -10,6 +10,8 @@ from schemas.vehicle import VehicleSchema
 vehicle_bp = Blueprint('vehicles', __name__)
 
 
+# Get all vehicles with pagination
+# ===============================================================================
 @vehicle_bp.route('/api/vehicles', methods=['GET'])
 def get_vehicles():
     """Get all vehicles with pagination."""
@@ -33,6 +35,8 @@ def get_vehicles():
     return make_response(jsonify(response), 200)
 
 
+# Get vehicle by ID
+# ===============================================================================
 @vehicle_bp.route('/api/vehicles/<int:vehicle_id>', methods=['GET'])
 def get_vehicle(vehicle_id):
     """Get a specific vehicle by ID."""
@@ -64,6 +68,8 @@ def get_vehicle(vehicle_id):
     return jsonify(response), 200
 
 
+# Create vehicle
+# ===============================================================================
 @vehicle_bp.route('/api/vehicles', methods=['POST'])
 def create_vehicle():
     """Create a new vehicle."""
@@ -76,6 +82,8 @@ def create_vehicle():
     return make_response(jsonify({'message': 'Vehicle created successfully', 'vehicle': result}), 201)
 
 
+# Update vehicle
+# ===============================================================================
 @vehicle_bp.route('/api/vehicles/<int:vehicle_id>', methods=['PUT'])
 def update_vehicle(vehicle_id):
     """Update an existing vehicle."""
@@ -91,6 +99,8 @@ def update_vehicle(vehicle_id):
     return make_response(jsonify({'message': 'Vehicle updated successfully', 'vehicle': result}), 200)
 
 
+# Delete vehicle
+# ===============================================================================
 @vehicle_bp.route('/api/vehicles/<int:vehicle_id>', methods=['DELETE'])
 def delete_vehicle(vehicle_id):
     """Delete a vehicle."""

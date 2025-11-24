@@ -1,32 +1,24 @@
-"""
-AutoGuardEC - Car Insurance Management System
-Main application entry point using Application Factory pattern.
-"""
+# ===============================================================================
+# MAIN APP AutoGuardEC - Car Insurance Management System
+# ===============================================================================
 
 from flask import Flask
 from extensions import db, ma
 from config import Config
 
-
+# Create and configure all Flask application components / instance
+# ===============================================================================
 def create_app(config_class=Config):
-    """
-    Application factory function.
-    Creates and configures the Flask application.
-    
-    Args:
-        config_class: Configuration class to use (default: Config)
-        
-    Returns:
-        Configured Flask application instance
-    """
     app = Flask(__name__)
     app.config.from_object(config_class)
     
     # Initialize extensions
+    # ===============================================================================
     db.init_app(app)
     ma.init_app(app)
     
     # Register blueprints
+    # ===============================================================================
     from routes import (
         customer_bp, vehicle_bp, agent_bp, coverage_bp,
         policy_bp, premium_payment_bp, claim_bp, 
@@ -47,6 +39,7 @@ def create_app(config_class=Config):
     app.register_blueprint(frontend_bp)
     
     # Create database tables
+    # ===============================================================================
     with app.app_context():
         # Import all models to ensure they're registered with SQLAlchemy
         from models import (

@@ -1,6 +1,6 @@
-"""
-Policy routes blueprint.
-"""
+# ===============================================================================
+# Policy routes blueprints
+# ===============================================================================
 
 from flask import Blueprint, request, jsonify, make_response
 from extensions import db
@@ -10,6 +10,8 @@ from schemas.policy import PolicySchema
 policy_bp = Blueprint('policies', __name__)
 
 
+# Get all policies with pagination
+# ===============================================================================
 @policy_bp.route('/api/policies/', methods=['GET'])
 def get_policies():
     """Get all policies with pagination."""
@@ -33,6 +35,8 @@ def get_policies():
     return make_response(jsonify(response), 200)
 
 
+# Get policy by ID
+# ===============================================================================
 @policy_bp.route('/api/policies/<int:policy_id>', methods=['GET'])
 def get_policy(policy_id):
     """Get a specific policy by ID."""
@@ -99,6 +103,8 @@ def get_policy(policy_id):
     return jsonify(response), 200
 
 
+# Create policy
+# ===============================================================================
 @policy_bp.route('/api/policies', methods=['POST'])
 def create_policy():
     """Create a new policy."""
@@ -111,6 +117,8 @@ def create_policy():
     return make_response(jsonify({'message': 'Policy created successfully', 'policy': result}), 201)
 
 
+# Update policy
+# ===============================================================================
 @policy_bp.route('/api/policies/<int:policy_id>', methods=['PUT'])
 def update_policy(policy_id):
     """Update an existing policy."""
@@ -126,6 +134,8 @@ def update_policy(policy_id):
     return make_response(jsonify({'message': 'Policy updated successfully', 'policy': result}), 200)
 
 
+# Delete policy
+# ===============================================================================
 @policy_bp.route('/api/policies/<int:policy_id>', methods=['DELETE'])
 def delete_policy(policy_id):
     """Delete a policy."""
