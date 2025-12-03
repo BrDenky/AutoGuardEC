@@ -18,8 +18,8 @@ class Config:
     # Database configuration - Connection with docker
     # ===============================================================================
     SQLALCHEMY_DATABASE_URI = os.getenv(
-        'SQLALCHEMY_DATABASE_URI',
-        'mysql+pymysql://root:123@localhost:3307/CarInsuranceDB?charset=utf8mb4'
+        "SQLALCHEMY_DATABASE_URI",
+        f"mysql+pymysql://{os.getenv('DB_USER', 'root')}:{os.getenv('DB_PASSWORD', '123')}@{os.getenv('DB_HOST', 'localhost')}:{os.getenv('DB_PORT', '3308')}/{os.getenv('DB_NAME', 'CarInsuranceDB')}?charset=utf8mb4"
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     

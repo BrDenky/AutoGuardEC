@@ -91,24 +91,7 @@ flask run
 | `PUT`    | `/claims/<id>`    | Update claim status             |
 | `DELETE` | `/employees/<id>` | Remove employee record          |
 
----
-
-## 📊 Dashboard Preview
-### Main View
-![alt text](image.png)
-### Main Dashboard
-![alt text](image-1.png)
-### Main Entity Table
-![alt text](image-2.png)
-### Add Register
-![alt text](image-3.png)
-### Edit Register
-![alt text](image-4.png)
-### Delete Register
-![alt text](image-5.png)
-### PDF report file of customers
-![alt text](image-6.png)
-
+```
 FLASK_APP=app.py
 FLASK_ENV=development
 SQLALCHEMY_DATABASE_URI=mysql+pymysql://root:12345@localhost:3306/autoguardec
@@ -132,11 +115,20 @@ flask run
 ---
 
 ## 📊 Dashboard Preview
-_(Insert screenshots once UI is complete)_
-
-| Policy Analytics | Customer Analytics | Employment Analytics |
-| ---------------- | ------------------ | -------------------- |
-| ![Policy](docs/img/policy_chart.png) | ![Customer](docs/img/customer_chart.png) | ![Employment](docs/img/employee_chart.png) |
+### Main View
+![alt text](image.png)
+### Main Dashboard
+![alt text](image-1.png)
+### Main Entity Table
+![alt text](image-2.png)
+### Add Register
+![alt text](image-3.png)
+### Edit Register
+![alt text](image-4.png)
+### Delete Register
+![alt text](image-5.png)
+### PDF report file of customers
+![alt text](image-6.png)
 
 ---
 
