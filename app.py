@@ -23,7 +23,7 @@ def create_app(config_class=Config):
         customer_bp, vehicle_bp, agent_bp, coverage_bp,
         policy_bp, premium_payment_bp, claim_bp, 
         claim_payment_bp, policy_coverage_bp,
-        dashboard_bp, frontend_bp
+        dashboard_bp, frontend_bp, customer_profile_pdf_bp
     )
     
     app.register_blueprint(customer_bp)
@@ -37,6 +37,7 @@ def create_app(config_class=Config):
     app.register_blueprint(policy_coverage_bp)
     app.register_blueprint(dashboard_bp)
     app.register_blueprint(frontend_bp)
+    app.register_blueprint(customer_profile_pdf_bp)
     
     # Create database tables
     # ===============================================================================

@@ -14,6 +14,7 @@ from routes.claim_payment import claim_payment_bp
 from routes.policy_coverage import policy_coverage_bp
 from routes.dashboard import dashboard_bp
 from routes.frontend import frontend_bp
+from routes.customer_profile_pdf import customer_profile_pdf_bp
 
 __all__ = [
     'customer_bp',
@@ -26,5 +27,6 @@ __all__ = [
     'claim_payment_bp',
     'policy_coverage_bp',
     'dashboard_bp',
-    'frontend_bp'
+    'frontend_bp',
+    'customer_profile_pdf_bp'
 ]

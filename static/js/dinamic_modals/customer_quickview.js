@@ -33,9 +33,10 @@ async function openCustomerQuickView(customerId) {
     document.getElementById("qv_customer_phone").textContent = data.phone || "N/A";
     document.getElementById("qv_customer_address").textContent = data.address || "N/A";
 
-    // Full profile link
-    document.getElementById("customerFullProfileBtn").href =
-      `/customers/${customerId}/profile`;
+    // Full profile link - opens PDF in new tab
+    const profileBtn = document.getElementById("customerFullProfileBtn");
+    profileBtn.href = `/api/customers/${customerId}/profile/pdf`;
+    profileBtn.target = "_blank";
 
     // Fill vehicles list
     const vList = document.getElementById("qv_customer_vehicles");
