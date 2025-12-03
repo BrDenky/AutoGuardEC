@@ -37,6 +37,48 @@ def get_customers():
 
     return make_response(jsonify(response), 200)
 
+
+# Search customers by name with pagination
+# ===============================================================================
+@customer_bp.route('/api/customers/search', methods=['GET'])
+def search_customers():
+    # Get query parameters
+    query = request.args.get('q', '', type=str)
+    page = request.args.get('page', default=1, type=int)
+    limit = request.args.get('limit', default=6, type=int)
+
+    # If query is empty, return all customers (same as get_customers)
+    if not query.strip():
+        return get_customers()
+
+    # Search by first_name or last_name (case-insensitive)
+    search_filter = db.or_(
+        Customer.first_name.ilike(f'%{query}%'),
+        Customer.last_name.ilike(f'%{query}%')
+    )
+
+    # Paginate filtered results
+    customers_paginated = Customer.query.filter(search_filter).paginate(
+        page=page, per_page=limit, error_out=False
+    )
+
+    # Serialize current page items
+    customers_schema = CustomerSchema(many=True)
+    result = customers_schema.dump(customers_paginated.items)
+
+    # Build response with pagination metadata
+    response = {
+        'customers': result,
+        'total_customers': customers_paginated.total,
+        'total_pages': customers_paginated.pages,
+        'current_page': customers_paginated.page,
+        'has_next': customers_paginated.has_next,
+        'has_prev': customers_paginated.has_prev
+    }
+
+    return make_response(jsonify(response), 200)
+
+
 # GET customer by ID
 # ========================================================================
 # @customer_bp.route('/api/customers/<int:customer_id>', methods=['GET'])
@@ -70,7 +112,9 @@ def get_customer(customer_id):
     # JSON que EXACTAMENTE espera el modal
     response = {
         "customer_id": customer.customer_id,
-        "name": full_name,
+        "first_name": customer.first_name,  # Para el modal de edición
+        "last_name": customer.last_name,    # Para el modal de edición
+        "name": full_name,                  # Para quick view
         "email": customer.email,
         "phone": customer.phone,
         "address": customer.address,

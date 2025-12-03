@@ -35,6 +35,45 @@ def get_agents():
     return make_response(jsonify(response), 200)
 
 
+# Search agents by name with pagination
+# ===============================================================================
+@agent_bp.route('/api/agents/search', methods=['GET'])
+def search_agents():
+    """Search agents by name with pagination."""
+    # Get query parameters
+    query = request.args.get('q', '', type=str)
+    page = request.args.get('page', default=1, type=int)
+    limit = request.args.get('limit', default=6, type=int)
+
+    # If query is empty, return all agents (same as get_agents)
+    if not query.strip():
+        return get_agents()
+
+    # Search by name (case-insensitive)
+    search_filter = Agent.name.ilike(f'%{query}%')
+
+    # Paginate filtered results
+    agents_paginated = Agent.query.filter(search_filter).paginate(
+        page=page, per_page=limit, error_out=False
+    )
+
+    # Serialize current page items
+    agents_schema = AgentSchema(many=True)
+    result = agents_schema.dump(agents_paginated.items)
+
+    # Build response with pagination metadata
+    response = {
+        'agents': result,
+        'total_agents': agents_paginated.total,
+        'total_pages': agents_paginated.pages,
+        'current_page': agents_paginated.page,
+        'has_next': agents_paginated.has_next,
+        'has_prev': agents_paginated.has_prev
+    }
+
+    return make_response(jsonify(response), 200)
+
+
 # Get agent by ID
 # ===============================================================================
 @agent_bp.route('/api/agents/<int:agent_id>', methods=['GET'])

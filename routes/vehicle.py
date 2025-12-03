@@ -35,6 +35,48 @@ def get_vehicles():
     return make_response(jsonify(response), 200)
 
 
+# Search vehicles by brand or model with pagination
+# ===============================================================================
+@vehicle_bp.route('/api/vehicles/search', methods=['GET'])
+def search_vehicles():
+    """Search vehicles by brand or model with pagination."""
+    # Get query parameters
+    query = request.args.get('q', '', type=str)
+    page = request.args.get('page', default=1, type=int)
+    limit = request.args.get('limit', default=6, type=int)
+
+    # If query is empty, return all vehicles (same as get_vehicles)
+    if not query.strip():
+        return get_vehicles()
+
+    # Search by brand or model (case-insensitive)
+    search_filter = db.or_(
+        Vehicle.brand.ilike(f'%{query}%'),
+        Vehicle.model.ilike(f'%{query}%')
+    )
+
+    # Paginate filtered results
+    vehicles_paginated = Vehicle.query.filter(search_filter).paginate(
+        page=page, per_page=limit, error_out=False
+    )
+
+    # Serialize current page items
+    vehicle_schema = VehicleSchema(many=True)
+    result = vehicle_schema.dump(vehicles_paginated.items)
+
+    # Build response with pagination metadata
+    response = {
+        'vehicles': result,
+        'total_vehicles': vehicles_paginated.total,
+        'total_pages': vehicles_paginated.pages,
+        'current_page': vehicles_paginated.page,
+        'has_next': vehicles_paginated.has_next,
+        'has_prev': vehicles_paginated.has_prev
+    }
+
+    return make_response(jsonify(response), 200)
+
+
 # Get vehicle by ID
 # ===============================================================================
 @vehicle_bp.route('/api/vehicles/<int:vehicle_id>', methods=['GET'])

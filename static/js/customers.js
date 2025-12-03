@@ -4,10 +4,18 @@ const API = "http://127.0.0.1:5000/api/customers";
 let currentPage = 1;
 const limit = 6;
 let totalPages = 1;
+let currentSearchQuery = ''; // Track current search query
 
 /* Load Customers - GET (Paginated) */
-async function loadCustomers(page = 1) {
-  const res = await fetch(`${API}?page=${page}&limit=${limit}`);
+async function loadCustomers(page = 1, searchQuery = '') {
+  let url = `${API}?page=${page}&limit=${limit}`;
+
+  // If there's a search query, use the search endpoint
+  if (searchQuery.trim()) {
+    url = `${API}/search?q=${encodeURIComponent(searchQuery)}&page=${page}&limit=${limit}`;
+  }
+
+  const res = await fetch(url);
   const data = await res.json();
 
   const tbody = document.querySelector("#customersTable");
@@ -34,35 +42,35 @@ async function loadCustomers(page = 1) {
       </tr>`;
   });
 
-// POST
-document.getElementById("customerForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
+  // POST
+  document.getElementById("customerForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-  const payload = {
-    first_name: document.getElementById("first_name").value,
-    last_name: document.getElementById("last_name").value,
-    address: document.getElementById("address").value,
-    phone: document.getElementById("phone").value,
-    email: document.getElementById("email").value
-  };
+    const payload = {
+      first_name: document.getElementById("first_name").value,
+      last_name: document.getElementById("last_name").value,
+      address: document.getElementById("address").value,
+      phone: document.getElementById("phone").value,
+      email: document.getElementById("email").value
+    };
 
-  const res = await fetch(API, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
+    const res = await fetch(API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    if (res.ok) {
+      const addModal = bootstrap.Modal.getInstance(document.getElementById("addCustomerModal"));
+      addModal.hide();
+      loadCustomers();
+    } else {
+      const toast = new bootstrap.Toast(document.getElementById("toastError"));
+      toast.show();
+    }
+
+    e.target.reset();
   });
-
-  if (res.ok) {
-    const addModal = bootstrap.Modal.getInstance(document.getElementById("addCustomerModal"));
-    addModal.hide();
-    loadCustomers();
-  } else {
-    const toast = new bootstrap.Toast(document.getElementById("toastError"));
-    toast.show();
-  }
-
-  e.target.reset();
-});
 
 
 
@@ -79,11 +87,11 @@ document.getElementById("customerForm").addEventListener("submit", async (e) => 
 
 /* Pagination button handlers */
 document.getElementById("prevPage").addEventListener("click", () => {
-  if (currentPage > 1) loadCustomers(currentPage - 1);
+  if (currentPage > 1) loadCustomers(currentPage - 1, currentSearchQuery);
 });
 
 document.getElementById("nextPage").addEventListener("click", () => {
-  if (currentPage < totalPages) loadCustomers(currentPage + 1);
+  if (currentPage < totalPages) loadCustomers(currentPage + 1, currentSearchQuery);
 });
 
 /* Initial load */
@@ -177,18 +185,32 @@ document.getElementById("confirmDeleteBtn").addEventListener("click", async () =
   const deleteModal = bootstrap.Modal.getInstance(document.getElementById("deleteModal"));
 
   if (res.ok) {
-  deleteModal.hide();
-  customerToDelete = null;
-  loadCustomers();
+    deleteModal.hide();
+    customerToDelete = null;
+    loadCustomers();
 
-  const toast = new bootstrap.Toast(document.getElementById("toastSuccess"));
-  toast.show();
-} else {
-  const toast = new bootstrap.Toast(document.getElementById("toastError"));
-  toast.show();
-}
+    const toast = new bootstrap.Toast(document.getElementById("toastSuccess"));
+    toast.show();
+  } else {
+    const toast = new bootstrap.Toast(document.getElementById("toastError"));
+    toast.show();
+  }
 });
 
+
+/* Search functionality with debouncing */
+const searchInput = document.getElementById("customerSearchInput");
+let searchDebounceTimer;
+
+searchInput.addEventListener("input", (e) => {
+  clearTimeout(searchDebounceTimer);
+
+  searchDebounceTimer = setTimeout(() => {
+    currentSearchQuery = e.target.value.trim();
+    currentPage = 1; // Reset to first page on new search
+    loadCustomers(1, currentSearchQuery);
+  }, 300); // 300ms debounce delay
+});
 
 
 loadCustomers();

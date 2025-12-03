@@ -4,10 +4,18 @@ const API = "http://127.0.0.1:5000/api/vehicles";
 let currentPage = 1;
 const limit = 6;
 let totalPages = 1;
+let currentSearchQuery = ''; // Track current search query
 
 /* Load Vehicles - GET (Paginated) */
-async function loadVehicles(page = 1) {
-  const res = await fetch(`${API}?page=${page}&limit=${limit}`);
+async function loadVehicles(page = 1, searchQuery = '') {
+  let url = `${API}?page=${page}&limit=${limit}`;
+
+  // If there's a search query, use the search endpoint
+  if (searchQuery.trim()) {
+    url = `${API}/search?q=${encodeURIComponent(searchQuery)}&page=${page}&limit=${limit}`;
+  }
+
+  const res = await fetch(url);
   const data = await res.json();
 
   const tbody = document.querySelector("#vehiclesTable");
@@ -51,11 +59,11 @@ async function loadVehicles(page = 1) {
 
 /* Pagination button handlers */
 document.getElementById("prevPage").addEventListener("click", () => {
-  if (currentPage > 1) loadVehicles(currentPage - 1);
+  if (currentPage > 1) loadVehicles(currentPage - 1, currentSearchQuery);
 });
 
 document.getElementById("nextPage").addEventListener("click", () => {
-  if (currentPage < totalPages) loadVehicles(currentPage + 1);
+  if (currentPage < totalPages) loadVehicles(currentPage + 1, currentSearchQuery);
 });
 
 /* Initial load */
@@ -72,7 +80,7 @@ refreshBtn.addEventListener("click", async () => {
 /* --- Add Vehicle Logic --- */
 document.getElementById("vehicleForm").addEventListener("submit", async (e) => {
   e.preventDefault();
-  
+
   const payload = {
     customer_id: parseInt(document.getElementById("customer_id").value),
     brand: document.getElementById("brand").value,
@@ -183,4 +191,18 @@ document.getElementById("confirmDeleteBtn").addEventListener("click", async () =
     const toast = new bootstrap.Toast(document.getElementById("toastError"));
     toast.show();
   }
+});
+
+/* Search functionality with debouncing */
+const searchInput = document.getElementById("vehicleSearchInput");
+let searchDebounceTimer;
+
+searchInput.addEventListener("input", (e) => {
+  clearTimeout(searchDebounceTimer);
+
+  searchDebounceTimer = setTimeout(() => {
+    currentSearchQuery = e.target.value.trim();
+    currentPage = 1; // Reset to first page on new search
+    loadVehicles(1, currentSearchQuery);
+  }, 300); // 300ms debounce delay
 });

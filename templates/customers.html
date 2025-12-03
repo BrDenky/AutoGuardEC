@@ -11,7 +11,7 @@
 {% block content %}
 <!-- Header with static btns-->
 <div class="container-fluid px-4">
-<!-- ADD CUSTOMER BOTTON-->
+  <!-- ADD CUSTOMER BOTTON-->
   <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
       <h2 class="fw-bold text-dark mb-0"><i class="fas fa-users"></i> Customers</h2>
@@ -22,186 +22,197 @@
   </div>
 
 
-<!-- MAIN CUSTOMERS TABLE - Dinamic table -->
-<!------------------------------------------------------------------------------------------------------------->
-<div class="card border-0 shadow-sm">
-  <div class="card-header bg-white d-flex justify-content-between align-items-center">
-    <h5 class="mb-0 fw-bold text-dark"><i class="fas fa-list"></i> Customer List</h5>
-    
-    <!-- Pagination and refresh buttons -->
-    <div class="d-flex gap-1 align-items-center">
-      <button id="prevPage" class="btn btn-outline-secondary btn-sm pagination-btn">
-        <i class="fas fa-chevron-left"></i> Previous
-      </button>
+  <!-- MAIN CUSTOMERS TABLE - Dinamic table -->
+  <!------------------------------------------------------------------------------------------------------------->
+  <div class="card border-0 shadow-sm">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+      <h5 class="mb-0 fw-bold text-dark"><i class="fas fa-list"></i> Customer List</h5>
 
-      <span id="pageInfo" class="fw-semibold text-secondary"></span>
-
-      <button id="nextPage" class="btn btn-outline-secondary btn-sm pagination-btn">
-        Next <i class="fas fa-chevron-right"></i>
-      </button>
-      
-      <button class="btn btn-outline-secondary btn-sm" id="refreshBtn">
-        <i class="fas fa-sync-alt"></i> Refresh
-      </button>
-    </div>
-  </div>
-  
-  <div class="card-body table-responsive">
-    <table class="table table-hover align-middle text-center">
-      <thead class="table-light">
-        <tr>
-          <th>ID</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Address</th>
-          <th>Phone</th>
-          <th>Email</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody id="customersTable"></tbody> <!-- customersTable is from customers.js-->
-    </table>
-  </div>
-</div>
-
-
-<!-- Add customer - Modal Form-->
-<!------------------------------------------------------------------------------------------------------------->
-<div class="modal fade" id="addCustomerModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content border-0 shadow-sm">
-      <div class="modal-header bg-success text-white">
-        <h5 class="modal-title"><i class="fas fa-user-plus"></i> Add Customer</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      <!-- Search Input -->
+      <div class="input-group" style="max-width: 300px;">
+        <span class="input-group-text bg-white border-end-0">
+          <i class="fas fa-search text-muted"></i>
+        </span>
+        <input type="text" class="form-control border-start-0" id="customerSearchInput" placeholder="Search by name...">
       </div>
 
-      <div class="modal-body">
-        <form id="customerForm" class="row g-3">
-          <div class="col-md-6">
-            <label class="form-label fw-semibold">First Name</label>
-            <input type="text" class="form-control" id="first_name" required>
-          </div>
-          <div class="col-md-6">
-            <label class="form-label fw-semibold">Last Name</label>
-            <input type="text" class="form-control" id="last_name" required>
-          </div>
-          <div class="col-md-6">
-            <label class="form-label fw-semibold">Email</label>
-            <input type="email" class="form-control" id="email" required>
-          </div>
-          <div class="col-md-6">
-            <label class="form-label fw-semibold">Phone</label>
-            <input type="text" class="form-control" id="phone">
-          </div>
-          <div class="col-12">
-            <label class="form-label fw-semibold">Address</label>
-            <input type="text" class="form-control" id="address">
-          </div>
-          <div class="col-12 mt-3 text-end">
-            <button type="submit" class="btn  btn-primary px-4"> <!-- Send data form to customers.js-->
-              <i class="fas fa-save"></i> Save
-            </button>
-          </div>
-        </form>
+      <!-- Pagination and refresh buttons -->
+      <div class="d-flex gap-1 align-items-center">
+        <button id="prevPage" class="btn btn-outline-secondary btn-sm pagination-btn">
+          <i class="fas fa-chevron-left"></i> Previous
+        </button>
+
+        <span id="pageInfo" class="fw-semibold text-secondary"></span>
+
+        <button id="nextPage" class="btn btn-outline-secondary btn-sm pagination-btn">
+          Next <i class="fas fa-chevron-right"></i>
+        </button>
+
+        <button class="btn btn-outline-secondary btn-sm" id="refreshBtn">
+          <i class="fas fa-sync-alt"></i> Refresh
+        </button>
       </div>
     </div>
-  </div>
-</div>
 
-
-<!-- EDIT CUSTOMER - Modal -->
-<!------------------------------------------------------------------------------------------------------------->
-<div class="modal fade" id="editModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content border-0 shadow-sm">
-      <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title"><i class="fas fa-pen"></i> Edit Customer</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <form id="editForm" class="row g-3"> <!-- customers.js / method PUT call (editForm) -->
-          <input type="hidden" id="edit_id">
-          <div class="col-md-6">
-            <label class="form-label">First Name</label>
-            <input type="text" id="edit_first_name" class="form-control" required>
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Last Name</label>
-            <input type="text" id="edit_last_name" class="form-control" required>
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Email</label>
-            <input type="email" id="edit_email" class="form-control" required>
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Phone</label>
-            <input type="text" id="edit_phone" class="form-control">
-          </div>
-          <div class="col-12">
-            <label class="form-label">Address</label>
-            <input type="text" id="edit_address" class="form-control">
-          </div>
-          <div class="col-12 mt-3 text-end">
-            <button type="submit" class="btn btn-primary"> <!-- Data Update in customers.js -->
-              <i class="fas fa-save"></i> Update
-            </button>
-          </div>
-        </form>
-      </div>
+    <div class="card-body table-responsive">
+      <table class="table table-hover align-middle text-center">
+        <thead class="table-light">
+          <tr>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Address</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="customersTable"></tbody> <!-- customersTable is from customers.js-->
+      </table>
     </div>
   </div>
-</div>
 
 
-<!-- DELETE CUSTOMER Confirmation - Modal -->
-<!------------------------------------------------------------------------------------------------------------->
-<div class="modal fade" id="deleteModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content border-0 shadow-sm">
-      <div class="modal-header bg-danger text-white">
-        <h5 class="modal-title"><i class="fas fa-exclamation-triangle"></i> Confirm Deletion</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body text-center">
-        <p class="mb-3 fs-5">Are you sure you want to delete this customer?</p>
-        <div class="d-flex justify-content-center gap-2">
-          <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-danger px-4" id="confirmDeleteBtn">Delete</button> <!-- customers.js / method DELETE call (confirmDeleteBtn) -->
+  <!-- Add customer - Modal Form-->
+  <!------------------------------------------------------------------------------------------------------------->
+  <div class="modal fade" id="addCustomerModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-sm">
+        <div class="modal-header bg-success text-white">
+          <h5 class="modal-title"><i class="fas fa-user-plus"></i> Add Customer</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body">
+          <form id="customerForm" class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">First Name</label>
+              <input type="text" class="form-control" id="first_name" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Last Name</label>
+              <input type="text" class="form-control" id="last_name" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Email</label>
+              <input type="email" class="form-control" id="email" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Phone</label>
+              <input type="text" class="form-control" id="phone">
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold">Address</label>
+              <input type="text" class="form-control" id="address">
+            </div>
+            <div class="col-12 mt-3 text-end">
+              <button type="submit" class="btn  btn-primary px-4"> <!-- Send data form to customers.js-->
+                <i class="fas fa-save"></i> Save
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
   </div>
-</div>
 
 
-<!-- TOAST NOTIFICATION (DELETE) -->
-<!------------------------------------------------------------------------------------------------------------->
-<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100">
-  
-  <!-- Success Toast -->
-  <div id="toastSuccess" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="d-flex">
-      <div class="toast-body fw-semibold">
-        <i class="fas fa-check-circle me-2"></i> Customer deleted successfully.
+  <!-- EDIT CUSTOMER - Modal -->
+  <!------------------------------------------------------------------------------------------------------------->
+  <div class="modal fade" id="editModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-sm">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title"><i class="fas fa-pen"></i> Edit Customer</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="editForm" class="row g-3"> <!-- customers.js / method PUT call (editForm) -->
+            <input type="hidden" id="edit_id">
+            <div class="col-md-6">
+              <label class="form-label">First Name</label>
+              <input type="text" id="edit_first_name" class="form-control" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Last Name</label>
+              <input type="text" id="edit_last_name" class="form-control" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Email</label>
+              <input type="email" id="edit_email" class="form-control" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Phone</label>
+              <input type="text" id="edit_phone" class="form-control">
+            </div>
+            <div class="col-12">
+              <label class="form-label">Address</label>
+              <input type="text" id="edit_address" class="form-control">
+            </div>
+            <div class="col-12 mt-3 text-end">
+              <button type="submit" class="btn btn-primary"> <!-- Data Update in customers.js -->
+                <i class="fas fa-save"></i> Update
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
     </div>
   </div>
-  <!-- TOAST ERROR NOTIFICATION (DELETE) -->
-  <div id="toastError" class="toast align-items-center text-bg-danger border-0 mt-2" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="d-flex">
-      <div class="toast-body fw-semibold">
-        <i class="fas fa-times-circle me-2"></i> Error: Unable to complete the action.
+
+
+  <!-- DELETE CUSTOMER Confirmation - Modal -->
+  <!------------------------------------------------------------------------------------------------------------->
+  <div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-sm">
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title"><i class="fas fa-exclamation-triangle"></i> Confirm Deletion</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body text-center">
+          <p class="mb-3 fs-5">Are you sure you want to delete this customer?</p>
+          <div class="d-flex justify-content-center gap-2">
+            <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-danger px-4" id="confirmDeleteBtn">Delete</button>
+            <!-- customers.js / method DELETE call (confirmDeleteBtn) -->
+          </div>
+        </div>
       </div>
-      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
     </div>
   </div>
 
-</div>  
+
+  <!-- TOAST NOTIFICATION (DELETE) -->
+  <!------------------------------------------------------------------------------------------------------------->
+  <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100">
+
+    <!-- Success Toast -->
+    <div id="toastSuccess" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive"
+      aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body fw-semibold">
+          <i class="fas fa-check-circle me-2"></i> Customer deleted successfully.
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+      </div>
+    </div>
+    <!-- TOAST ERROR NOTIFICATION (DELETE) -->
+    <div id="toastError" class="toast align-items-center text-bg-danger border-0 mt-2" role="alert"
+      aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body fw-semibold">
+          <i class="fas fa-times-circle me-2"></i> Error: Unable to complete the action.
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+      </div>
+    </div>
+
+  </div>
 
 
 
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="{{ url_for('static', filename='js/customers.js') }}"></script> <!-- customers.js refer-->
-{% endblock %}
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{{ url_for('static', filename='js/customers.js') }}"></script> <!-- customers.js refer-->
+  {% endblock %}

@@ -4,10 +4,18 @@ const API = "http://127.0.0.1:5000/api/agents";
 let currentPage = 1;
 const limit = 6;
 let totalPages = 1;
+let currentSearchQuery = ''; // Track current search query
 
 /* Load Agents - GET (Paginated) */
-async function loadAgents(page = 1) {
-  const res = await fetch(`${API}?page=${page}&limit=${limit}`);
+async function loadAgents(page = 1, searchQuery = '') {
+  let url = `${API}?page=${page}&limit=${limit}`;
+
+  // If there's a search query, use the search endpoint
+  if (searchQuery.trim()) {
+    url = `${API}/search?q=${encodeURIComponent(searchQuery)}&page=${page}&limit=${limit}`;
+  }
+
+  const res = await fetch(url);
   const data = await res.json();
 
   const tbody = document.querySelector("#agentsTable");
@@ -45,11 +53,11 @@ async function loadAgents(page = 1) {
 
 /* Pagination button handlers */
 document.getElementById("prevPage").addEventListener("click", () => {
-  if (currentPage > 1) loadAgents(currentPage - 1);
+  if (currentPage > 1) loadAgents(currentPage - 1, currentSearchQuery);
 });
 
 document.getElementById("nextPage").addEventListener("click", () => {
-  if (currentPage < totalPages) loadAgents(currentPage + 1);
+  if (currentPage < totalPages) loadAgents(currentPage + 1, currentSearchQuery);
 });
 
 /* Initial load */
@@ -172,6 +180,20 @@ document.getElementById("confirmDeleteBtn").addEventListener("click", async () =
     const toast = new bootstrap.Toast(document.getElementById("toastError"));
     toast.show();
   }
+});
+
+/* Search functionality with debouncing */
+const searchInput = document.getElementById("agentSearchInput");
+let searchDebounceTimer;
+
+searchInput.addEventListener("input", (e) => {
+  clearTimeout(searchDebounceTimer);
+
+  searchDebounceTimer = setTimeout(() => {
+    currentSearchQuery = e.target.value.trim();
+    currentPage = 1; // Reset to first page on new search
+    loadAgents(1, currentSearchQuery);
+  }, 300); // 300ms debounce delay
 });
 
 /* Initial table load */
