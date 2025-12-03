@@ -116,19 +116,19 @@ flask run
 
 ## 📊 Dashboard Preview
 ### Main View
-![alt text](image.png)
+![alt text](imgs/image.png)
 ### Main Dashboard
-![alt text](image-1.png)
+![alt text](imgs/image-1.png)
 ### Main Entity Table
-![alt text](image-2.png)
+![alt text](imgs/image-2.png)
 ### Add Register
-![alt text](image-3.png)
+![alt text](imgs/image-3.png)
 ### Edit Register
-![alt text](image-4.png)
+![alt text](imgs/image-4.png)
 ### Delete Register
-![alt text](image-5.png)
+![alt text](imgs/image-5.png)
 ### PDF report file of customers
-![alt text](image-6.png)
+![alt text](imgs/image-6.png)
 
 ---
 
