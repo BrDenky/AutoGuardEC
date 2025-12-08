@@ -20,14 +20,10 @@ _A modern auto insurance management system designed for the Ecuadorian market._
 ---
 
 ## 🏗️ System Architecture
-```
-Frontend (Bootstrap 5 / HTML / JS)  
-        │  
-        ▼  
-Backend (Flask REST API)  
-        │  
-        ▼  
-Database (MySQL via SQLAlchemy ORM)
+```mermaid
+graph TD
+    Client[Frontend (Bootstrap 5 / HTML / JS)] -->|REST API| Server[Backend (Flask)]
+    Server -->|SQLAlchemy ORM| DB[(Database MySQL 8)]
 ```
 
 ---
@@ -35,7 +31,7 @@ Database (MySQL via SQLAlchemy ORM)
 ## ⚙️ Tech Stack
 | Layer | Technology |
 |-------|-------------|
-| **Backend** | Python 3.11, Flask, Flask-SQLAlchemy |
+| **Backend** | Python 3.10+, Flask, Flask-SQLAlchemy |
 | **Database** | MySQL 8 (Dockerized) |
 | **Frontend** | HTML5, CSS3, Bootstrap 5, Chart.js |
 | **Containerization** | Docker, Docker Compose |
@@ -45,62 +41,75 @@ Database (MySQL via SQLAlchemy ORM)
 
 ## 🧰 Installation & Setup
 
-### 1️⃣ Clone the repository
-```bash
-git clone https://github.com/brdenky/AutoGuardEC.git
-cd AutoGuardEC
-```
+You can run AutoGuardEC using **Docker Compose** (recommended) or set it up **locally** for development.
 
-### 2️⃣ Create and activate a virtual environment
-```bash
-python -m venv venv
-source venv/bin/activate       # (Linux/Mac)
-venv\Scripts\activate          # (Windows)
-```
+### Option 1: 🐳 Run with Docker Compose (Recommended)
+This method sets up both the application and the database in containers.
 
-### 3️⃣ Install dependencies
-```bash
-pip install -r requirements.txt
-```
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/brdenky/AutoGuardEC.git
+   cd AutoGuardEC
+   ```
 
-### 4️⃣ Run MySQL in Docker
-```bash
-docker run --name mysqlcontainer10 -e MYSQL_ROOT_PASSWORD=12345 -e MYSQL_DATABASE=autoguardec -p 3306:3306 -d mysql:8.0
-```
+2. **Start the services**
+   ```bash
+   docker-compose up --build
+   ```
+   - The database will be initialized with `CarInsuranceDB`.
+   - The web app will start on port `5000`.
 
-### 5️⃣ Configure environment variables
-Create a `.env` file in the project root:
-```env
-FLASK_APP=app.py
-FLASK_ENV=development
-SQLALCHEMY_DATABASE_URI=mysql+pymysql://root:12345@localhost:3306/autoguardec
-```
-
-### 6️⃣ Run the app
-```bash
-flask run
-```
+3. **Access the application**
+   Open [http://localhost:5000](http://localhost:5000) in your browser.
 
 ---
 
-## 📡 Example API Endpoints
-| Method   | Endpoint          | Description                     |
-| -------- | ----------------- | ------------------------------- |
-| `GET`    | `/policies`       | Retrieve all insurance policies |
-| `POST`   | `/customers`      | Add a new customer              |
-| `PUT`    | `/claims/<id>`    | Update claim status             |
-| `DELETE` | `/employees/<id>` | Remove employee record          |
+### Option 2: 🔧 Local Development
+Run the Flask application locally while hosting the database in Docker.
 
-```
-FLASK_APP=app.py
-FLASK_ENV=development
-SQLALCHEMY_DATABASE_URI=mysql+pymysql://root:12345@localhost:3306/autoguardec
-```
+1. **Clone and Setup Python Environment**
+   ```bash
+   git clone https://github.com/brdenky/AutoGuardEC.git
+   cd AutoGuardEC
+   python -m venv venv
+   
+   # Activate Virtual Environment
+   # Windows:
+   venv\Scripts\activate
+   # Linux/Mac:
+   source venv/bin/activate
+   ```
 
-### 6️⃣ Run the app
-```bash
-flask run
-```
+2. **Install Dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Start the Database**
+   Use Docker Compose to start only the database service.
+   ```bash
+   docker-compose up -d db
+   ```
+   *This exposes MySQL on `localhost:3308`.*
+
+4. **Configure Environment**
+   Create a `.env` file in the project root logic (optional, as defaults are set in `config.py`):
+   ```env
+   FLASK_APP=app.py
+   FLASK_ENV=development
+   # Database Configuration (Matches docker-compose.yml ports)
+   DB_HOST=localhost
+   DB_PORT=3308
+   DB_USER=root
+   DB_PASSWORD=123
+   DB_NAME=CarInsuranceDB
+   ```
+
+5. **Run the Application**
+   ```bash
+   flask run
+   ```
+   Access at [http://localhost:5000](http://localhost:5000).
 
 ---
 
@@ -116,19 +125,20 @@ flask run
 
 ## 📊 Dashboard Preview
 ### Main View
-![alt text](imgs/image.png)
+![Main View](imgs/image.png)
+
 ### Main Dashboard
-![alt text](imgs/image-1.png)
-### Main Entity Table
-![alt text](imgs/image-2.png)
-### Add Register
-![alt text](imgs/image-3.png)
-### Edit Register
-![alt text](imgs/image-4.png)
-### Delete Register
-![alt text](imgs/image-5.png)
-### PDF report file of customers
-![alt text](imgs/image-6.png)
+![Main Dashboard](imgs/image-1.png)
+
+### Entity Management
+![Entity Table](imgs/image-2.png)
+
+### Forms (Add/Edit)
+![Add Register](imgs/image-3.png)
+![Edit Register](imgs/image-4.png)
+
+### Reports
+![PDF Report](imgs/image-6.png)
 
 ---
 
@@ -137,7 +147,7 @@ Run unit tests with:
 ```bash
 pytest
 ```
-Or API tests with Postman collection (available in `/tests/postman_collection.json`).
+Or use the Postman collection available in `/tests/postman_collection.json`.
 
 ---
 
@@ -156,10 +166,10 @@ Computer Science Student – Yachay Tech University
 ---
 
 ## 🏁 Future Improvements
-- Integrate JWT Authentication for role-based access
-- Add email notifications for policy renewals
-- Implement OCR for automatic claim document scanning
-- Deploy to AWS EC2 with Nginx reverse proxy
+- [ ] Integrate JWT Authentication for role-based access
+- [ ] Add email notifications for policy renewals
+- [ ] Implement OCR for automatic claim document scanning
+- [ ] Deploy to AWS EC2 with Nginx reverse proxy
 
 ---
 
@@ -167,8 +177,6 @@ Computer Science Student – Yachay Tech University
 This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
 
 ---
-
   
-**Made with ❤️ by the AutoGuardEC Team**
-
+**Made with ❤️ by the AutoGuardEC Team**  
 🚗 *Your peace of mind every mile.*

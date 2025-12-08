@@ -23,3 +23,4 @@ xhtml2pdf==0.2.16
 reportlab==4.2.5
 arabic-reshaper==3.0.0
 python-bidi==0.6.7
+pytest==8.0.0
